@@ -6,7 +6,7 @@ const MapTest = () => {
     <div>
       <Map
         center={{ lat: 33.5563, lng: 126.79581 }}
-        style={{ width: '100%', height: '360px' }}
+        style={{ width: '100%', height: '100vh' }}
       ></Map>
     </div>
   );

@@ -1,10 +1,10 @@
 import React from 'react';
-import MapTest from './components/Map';
+import Router from "router";
 
 function App() {
   return (
     <div className="App">
-      <MapTest></MapTest>
+      <Router />
     </div>
   );
 }
