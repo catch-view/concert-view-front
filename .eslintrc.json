@@ -17,7 +17,10 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
-  "rules": { "prettier/prettier": ["error", { "singleQuote": true }] },
+  "rules": { 
+    "prettier/prettier": ["error", { "singleQuote": true, "endOfLine": "auto" }],
+    "linebreak-style": 0
+  },
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx", ".js"]
