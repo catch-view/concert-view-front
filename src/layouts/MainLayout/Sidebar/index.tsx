@@ -1,8 +1,11 @@
 import React from 'react';
-import { styled, Drawer, Theme, CSSObject } from '@mui/material';
+import { styled, Drawer, IconButton, Theme, CSSObject } from '@mui/material';
+
+// icons
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 // project imports
-import { useAppSelector } from 'src/store/hook';
+import { ISidebarProps } from './interface';
 
 const drawerWidth = 240;
 
@@ -44,9 +47,32 @@ const MuiDrawer = styled(Drawer, {
   }),
 }));
 
-const AppSidebar = () => {
-  const { showAppSidebar } = useAppSelector((state) => state.uis);
-  return <MuiDrawer open={showAppSidebar}></MuiDrawer>;
+const SidebarHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const AppSidebar = ({
+  showAppSidebar,
+  toggleShowAppSidebar,
+}: ISidebarProps) => {
+  return (
+    <MuiDrawer variant="permanent" open={showAppSidebar}>
+      <SidebarHeader>
+        <IconButton
+          onClick={() => {
+            toggleShowAppSidebar();
+          }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+      </SidebarHeader>
+    </MuiDrawer>
+  );
 };
 
 export default AppSidebar;

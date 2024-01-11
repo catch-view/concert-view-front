@@ -10,17 +10,13 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 // project imports
-import { useAppDispatch, useAppSelector } from 'src/store/hook';
-import { toggleShowAppSidebar } from 'src/store/features/uis/uisSlice';
+import { IHeaderProps } from './interface';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppHeader = () => {
-  const { showAppSidebar } = useAppSelector((state) => state.uis);
-  const dispatch = useAppDispatch();
-
+const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
   const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
   })<AppBarProps>(({ theme, open }) => ({
@@ -45,7 +41,7 @@ const AppHeader = () => {
         <IconButton
           color="inherit"
           aria-label="open drawer"
-          onClick={() => dispatch(toggleShowAppSidebar())}
+          onClick={toggleShowAppSidebar}
           edge="start"
           sx={{
             marginRight: 5,

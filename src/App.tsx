@@ -1,7 +1,15 @@
 import React from 'react';
 
-function App() {
-  return <div className="App">test</div>;
-}
+// project imports
+import NavigationScroll from './layouts/MainLayout/NavigationScroll';
+import Routes from './routes';
+
+const App = () => {
+  return (
+    <NavigationScroll>
+      <Routes />
+    </NavigationScroll>
+  );
+};
 
 export default App;
