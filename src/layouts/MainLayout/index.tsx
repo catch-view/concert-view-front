@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
-import { toggleShowAppSidebar } from 'src/store/features/uis/uisSlice';
+import { toggleShowAppSidebar as toggle } from 'src/store/features/uis/uisSlice';
 import { drawerWidth } from 'src/store/constant';
 
 interface IStyledMainProps {
@@ -53,7 +53,7 @@ const MainLayout = () => {
   const dispatch = useAppDispatch();
 
   const toggleShowAppSidebar = () => {
-    dispatch(toggleShowAppSidebar);
+    dispatch(toggle(!showAppSidebar));
   };
 
   return (

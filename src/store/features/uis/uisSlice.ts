@@ -1,14 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const uisSlice = createSlice({
   name: 'uis',
   initialState: {
-    showAppSidebar: true,
+    showAppSidebar: false,
   },
 
   reducers: {
-    toggleShowAppSidebar: (state) => {
-      state.showAppSidebar = !state.showAppSidebar;
+    toggleShowAppSidebar: (state, action: PayloadAction<boolean>) => {
+      state.showAppSidebar = action.payload;
     },
   },
 });

@@ -25,7 +25,7 @@ const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    ...(showAppSidebar && {
+    ...(open && {
       marginLeft: 240,
       width: `calc(100% - ${240}px)`,
       transition: theme.transitions.create(['width', 'margin'], {
@@ -36,7 +36,14 @@ const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
   }));
 
   return (
-    <AppBar position="fixed" open={showAppSidebar}>
+    <AppBar
+      position="fixed"
+      open={showAppSidebar}
+      sx={{
+        backgroundColor: 'white',
+        color: 'rgba(0,0,0,0.8)',
+      }}
+    >
       <Toolbar>
         <IconButton
           color="inherit"
@@ -50,9 +57,6 @@ const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap component="div">
-          Mini variant drawer
-        </Typography>
       </Toolbar>
     </AppBar>
   );

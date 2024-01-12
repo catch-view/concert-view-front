@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 // ==============================|| NAVIGATION SCROLL TO TOP ||============================== //
 
 interface INavigationsScrollProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 const NavigationScroll = ({ children }: INavigationsScrollProps) => {
   const location = useLocation();

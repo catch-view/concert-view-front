@@ -1,6 +1,8 @@
-import { lazy } from 'react';
+import React from 'react';
+
 // project imports
 import MainLayout from 'src/layouts/MainLayout';
+import Home from 'src/views/Home';
 
 const MainRoutes = {
   path: '/',
@@ -8,8 +10,8 @@ const MainRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: '/',
-      element: null,
+      path: 'home',
+      element: <Home />,
     },
   ],
 };
