@@ -1,43 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import { Map } from 'react-kakao-maps-sdk';
+import { Box, IconButton, styled } from '@mui/material';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
+
+// material icons
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 
 // project imports
+import KakaoMap from './KakaoMap';
+import PlacesDrawer from './PlacesDrawer';
 import MapLoading from 'src/uis/Loadings/MapLoading';
 import { useAppDispatch } from 'src/store/hook';
 import useGeolocation from 'src/hooks/useGeolocation';
 
+const MapHeader = styled(Box)({
+  width: '100%',
+  height: '65px',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+
+  paddingRight: '30px',
+});
+
+const MapContent = styled(Box)({
+  width: '100%',
+  height: '100%',
+});
+
 const Home = () => {
-  const dispatch = useAppDispatch();
-  const [mapLocState, setMapLocState] = useState({
-    // 지도의 초기 위치
-    center: { lat: 37.5728602, lng: 126.9759717 },
-    // 지도 위치 변경시 panto를 이용할지에 대해서 정의
-    isPanto: false,
-  });
-  const { loaded, coordinates, error } = useGeolocation();
-  useEffect(() => {
-    if (coordinates) {
-      setMapLocState({
-        center: {
-          lat: coordinates?.lat || mapLocState.center.lat,
-          lng: coordinates?.lng || mapLocState.center.lng,
-        },
-        isPanto: true,
-      });
-    }
-  }, [loaded]);
+  const [showPlacesDrawer, setShowPlacesDrawer] = useState(true);
+
+  const toggleShowPlacesDrawer = () => {
+    setShowPlacesDrawer(!showPlacesDrawer);
+  };
 
   return (
     <Box
       sx={{
-        height: '500px',
+        position: 'relative',
+        height: '630px',
         display: 'flex',
+        flexDirection: 'column',
+        alitnItems: 'center',
+        overflowX: 'hidden',
+        margin: '20px',
+        borderRadius: '1rem',
+        border: '1px solid rgba(0,0,0,0.2)',
       }}
     >
-      fk
-      <MapLoading />
-      {/*{loaded && <Map center={mapLocState.center} />} */}
+      <MapHeader>
+        <IconButton
+          size="small"
+          sx={{
+            display: showPlacesDrawer ? 'none' : '',
+            zIndex: 60,
+          }}
+          onClick={toggleShowPlacesDrawer}
+        >
+          <HolidayVillageIcon />
+        </IconButton>
+      </MapHeader>
+
+      <MapContent>
+        <PlacesDrawer
+          open={showPlacesDrawer}
+          toggleOpenDrawer={toggleShowPlacesDrawer}
+        />
+        <KakaoMap />
+      </MapContent>
     </Box>
   );
 };

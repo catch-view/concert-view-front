@@ -8,11 +8,12 @@ import {
 // project imports
 import NavigationScroll from './layouts/MainLayout/NavigationScroll';
 import Routes from './routes';
+import theme from './themes';
 
 const App = () => {
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={{}}>
+      <ThemeProvider theme={theme('light')}>
         <CssBaseline />
         <NavigationScroll>
           <Routes />

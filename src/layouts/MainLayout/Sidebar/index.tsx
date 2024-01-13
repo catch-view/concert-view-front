@@ -1,8 +1,21 @@
 import React from 'react';
-import { styled, Drawer, IconButton, Theme, CSSObject } from '@mui/material';
+import {
+  styled,
+  Drawer,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  Theme,
+  CSSObject,
+} from '@mui/material';
 
 // icons
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import FoodBankIcon from '@mui/icons-material/FoodBank';
 
 // project imports
 import { ISidebarProps } from './interface';
@@ -71,6 +84,34 @@ const AppSidebar = ({
           <ChevronLeftIcon />
         </IconButton>
       </SidebarHeader>
+
+      <Divider />
+
+      <List>
+        <ListItem disablePadding sx={{ display: 'block' }}>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: showAppSidebar ? 'initial' : 'center',
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: showAppSidebar ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
+              <FoodBankIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'place'}
+              sx={{ opacity: showAppSidebar ? 1 : 0 }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
     </MuiDrawer>
   );
 };

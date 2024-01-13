@@ -4,7 +4,7 @@ import {
   AppBarProps as MuiAppBarProps,
   Toolbar,
   IconButton,
-  Typography,
+  useTheme,
   styled,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,25 +15,26 @@ import { IHeaderProps } from './interface';
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
-
-const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
-  const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-  })<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: 240,
+    width: `calc(100% - ${240}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      marginLeft: 240,
-      width: `calc(100% - ${240}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
+  }),
+}));
+
+const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
+  const theme = useTheme();
 
   return (
     <AppBar
