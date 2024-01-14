@@ -1,13 +1,8 @@
-export interface IPosition {
-  lat: number | null;
-  lng: number | null;
-  addressName: string;
-}
-
 export interface IPlace {
   address_name: string;
   category_group_code: string;
   category_group_name: string;
+  category_name: string;
   distance: string;
   id: string;
   phone: string;

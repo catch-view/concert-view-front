@@ -1,12 +1,36 @@
-import React from 'react';
-import { Box, List, IconButton } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  List,
+  ListItem,
+  IconButton,
+  TextField,
+  Divider,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+
+// project imports
+import PlacesList from './PlacesList';
+import { IPlace } from './PlacesList/interface';
 
 interface IPlacesDrawer {
   open: boolean;
   toggleOpenDrawer: () => void;
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
+  const [places, setPlaces] = useState<IPlace[]>([]);
+
+  useEffect(() => {
+    const ps = new kakao.maps.services.Places();
+
+    ps.keywordSearch('서촌 전시', (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const placesData = data as IPlace[];
+        setPlaces(placesData);
+      }
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -24,6 +48,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
         flexDirection: 'column',
         opacity: open ? 1 : 0,
         transition: 'opacity 0.2s ease-in-out',
+        borderLeft: '1px solid rgba(0,0,0,0.1)',
       }}
     >
       {/* header */}
@@ -38,8 +63,15 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
         </IconButton>
       </Box>
 
+      <Divider />
+
       {/* contents */}
-      <List>Place Cards</List>
+      <TextField
+        id="filled-basic"
+        label="장소 키워드를 검색해보세요"
+        variant="filled"
+      />
+      <PlacesList places={places} />
 
       {/* footer */}
       <Box>pagination</Box>

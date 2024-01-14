@@ -31,9 +31,9 @@ const Main = styled('main', {
         }
   ),
   [theme.breakpoints.up('md')]: {
-    marginLeft: 15,
-    marginTop: 100,
-    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: 0,
+    marginTop: 80,
+    width: '100%',
   },
   [theme.breakpoints.down('md')]: {
     marginLeft: '20px',

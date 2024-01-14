@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import uisReducer from './features/uis/uisSlice';
+import mapReducer from './features/map/mapSlice';
 
 const store = configureStore({
   reducer: {
     uis: uisReducer,
+    map: mapReducer,
   },
 });
 

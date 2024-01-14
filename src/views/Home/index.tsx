@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, IconButton, styled } from '@mui/material';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
 // material icons
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
@@ -8,47 +7,40 @@ import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 // project imports
 import KakaoMap from './KakaoMap';
 import PlacesDrawer from './PlacesDrawer';
-import MapLoading from 'src/uis/Loadings/MapLoading';
-import { useAppDispatch } from 'src/store/hook';
 import useGeolocation from 'src/hooks/useGeolocation';
-
-const MapHeader = styled(Box)({
-  width: '100%',
-  height: '65px',
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-
-  paddingRight: '30px',
-});
-
-const MapContent = styled(Box)({
-  width: '100%',
-  height: '100%',
-});
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import {
+  setFocusingPosition,
+  setUserPosition,
+} from 'src/store/features/map/mapSlice';
+import * as Styled from './styled';
 
 const Home = () => {
-  const [showPlacesDrawer, setShowPlacesDrawer] = useState(true);
+  const dispatch = useAppDispatch();
 
+  // 우측 drawer show/hide 관련
+  const [showPlacesDrawer, setShowPlacesDrawer] = useState(true);
   const toggleShowPlacesDrawer = () => {
     setShowPlacesDrawer(!showPlacesDrawer);
   };
 
+  const { loaded, address, coordinates, error } = useGeolocation();
+
+  useEffect(() => {
+    if (loaded) {
+      dispatch(
+        setUserPosition({
+          lat: coordinates?.lat || 0,
+          lng: coordinates?.lng || 0,
+          addressName: address,
+        })
+      );
+    }
+  }, [loaded]);
+
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        height: '630px',
-        display: 'flex',
-        flexDirection: 'column',
-        alitnItems: 'center',
-        overflowX: 'hidden',
-        margin: '20px',
-        borderRadius: '1rem',
-        border: '1px solid rgba(0,0,0,0.2)',
-      }}
-    >
-      <MapHeader>
+    <Styled.HomeContainer>
+      <Styled.MapHeader>
         <IconButton
           size="small"
           sx={{
@@ -59,16 +51,17 @@ const Home = () => {
         >
           <HolidayVillageIcon />
         </IconButton>
-      </MapHeader>
+      </Styled.MapHeader>
 
-      <MapContent>
+      <Styled.MapContent>
+        <Styled.UserPosCard>사용자 위치: {address}</Styled.UserPosCard>
         <PlacesDrawer
           open={showPlacesDrawer}
           toggleOpenDrawer={toggleShowPlacesDrawer}
         />
         <KakaoMap />
-      </MapContent>
-    </Box>
+      </Styled.MapContent>
+    </Styled.HomeContainer>
   );
 };
 
