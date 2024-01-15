@@ -8,14 +8,21 @@ import {
   Divider,
 } from '@mui/material';
 
+// project imports
 import PlaceCard from './PlaceCard';
+
+// redux
+import { useAppDispatch } from 'src/store/hook';
+import { setFocusingPosition } from 'src/store/features/map/mapSlice';
+
+import { IPlace } from './interface';
 
 interface IPlacesList {
   places: IPlace[];
 }
-import { IPlace } from './interface';
-
 const PlacesList = ({ places }: IPlacesList) => {
+  const dispatch = useAppDispatch();
+
   return (
     <List
       sx={{
@@ -24,7 +31,18 @@ const PlacesList = ({ places }: IPlacesList) => {
       }}
     >
       {places.map((place) => (
-        <ListItem key={place.id}>
+        <ListItem
+          key={place.id}
+          onClick={() => {
+            dispatch(
+              setFocusingPosition({
+                lat: Number(place.y),
+                lng: Number(place.x),
+                addressName: '',
+              })
+            );
+          }}
+        >
           <PlaceCard {...place} />
         </ListItem>
       ))}

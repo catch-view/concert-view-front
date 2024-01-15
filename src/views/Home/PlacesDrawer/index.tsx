@@ -6,56 +6,65 @@ import {
   IconButton,
   TextField,
   Divider,
+  Pagination,
+  Stack,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 // project imports
 import PlacesList from './PlacesList';
 import { IPlace } from './PlacesList/interface';
+import * as Styled from './styled';
 
 interface IPlacesDrawer {
   open: boolean;
   toggleOpenDrawer: () => void;
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
+  const ps = new kakao.maps.services.Places();
   const [places, setPlaces] = useState<IPlace[]>([]);
+  const [pageData, setPageData] = useState<{
+    curPage: number;
+    totalPages: null | number;
+  }>({
+    curPage: 1,
+    totalPages: null,
+  });
+
+  const handlePageClick = (page: number) => {
+    ps.keywordSearch(
+      '신문로2가 전시',
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const placesData = data as IPlace[];
+          setPlaces(placesData);
+        }
+      },
+      {
+        page,
+      }
+    );
+  };
 
   useEffect(() => {
-    const ps = new kakao.maps.services.Places();
-
-    ps.keywordSearch('서촌 전시', (data, status, _pagination) => {
+    ps.keywordSearch('신문로2가 전시', (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         const placesData = data as IPlace[];
         setPlaces(placesData);
+        setPageData({ ...pageData, totalPages: _pagination.last });
       }
     });
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: '330px',
-        height: '100%',
-        padding: '5px',
-        background: 'rgba(255, 255, 255, 0.8)',
-        zIndex: 50,
-        fontSize: '12px',
-        display: 'flex',
-        flexDirection: 'column',
-        opacity: open ? 1 : 0,
-        transition: 'opacity 0.2s ease-in-out',
-        borderLeft: '1px solid rgba(0,0,0,0.1)',
-      }}
-    >
+    <Styled.DrawerBox open={open}>
       {/* header */}
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingY: '0.4rem',
         }}
       >
         <IconButton onClick={toggleOpenDrawer}>
@@ -63,7 +72,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
         </IconButton>
       </Box>
 
-      <Divider />
+      <Divider sx={{ marginBottom: '0.85rem' }} />
 
       {/* contents */}
       <TextField
@@ -74,8 +83,24 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
       <PlacesList places={places} />
 
       {/* footer */}
-      <Box>pagination</Box>
-    </Box>
+      {pageData.totalPages && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Stack spacing={2}>
+            <Pagination
+              count={pageData.totalPages}
+              onChange={(event, page) => {
+                handlePageClick(page);
+              }}
+            />
+          </Stack>
+        </Box>
+      )}
+    </Styled.DrawerBox>
   );
 };
 

@@ -15,8 +15,9 @@ const KakaoMap = () => {
     (state) => state.map
   );
   const dispatch = useAppDispatch();
+
+  // 최초 렌더링 시 현재 사용자 접속 위치 focusing
   useEffect(() => {
-    console.log('kakao map rendered');
     dispatch(setFocusingPosition({ ...userPosition }));
   }, [userPosition]);
 
@@ -24,21 +25,22 @@ const KakaoMap = () => {
     <Map
       id="map"
       center={{
-        // 지도의 중심좌표
-        lat: focusingPosition?.lat || 0,
-        lng: focusingPosition?.lng || 0,
+        lat: focusingPosition.lat || 0,
+        lng: focusingPosition.lng || 0,
       }}
+      isPanto={true}
       style={{
         // 지도의 크기
         width: '100%',
         height: '100%',
       }}
     >
+      {/* 접속자 위치 마커 */}
       <Marker
         position={{
-          // 지도의 중심좌표
-          lat: userPosition?.lat || 0,
-          lng: userPosition?.lng || 0,
+          // 마커 좌표
+          lat: focusingPosition?.lat || 0,
+          lng: focusingPosition?.lng || 0,
         }}
       />
     </Map>

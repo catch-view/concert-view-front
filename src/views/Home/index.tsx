@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
 
 // material icons
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
@@ -54,7 +54,19 @@ const Home = () => {
       </Styled.MapHeader>
 
       <Styled.MapContent>
-        <Styled.UserPosCard>사용자 위치: {address}</Styled.UserPosCard>
+        <Styled.UserPosCard
+          onClick={() => {
+            dispatch(
+              setFocusingPosition({
+                lat: coordinates?.lat || 0,
+                lng: coordinates?.lng || 0,
+                addressName: address,
+              })
+            );
+          }}
+        >
+          접속 위치: {address}
+        </Styled.UserPosCard>
         <PlacesDrawer
           open={showPlacesDrawer}
           toggleOpenDrawer={toggleShowPlacesDrawer}

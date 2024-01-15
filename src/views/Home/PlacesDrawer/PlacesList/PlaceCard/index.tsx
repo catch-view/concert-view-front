@@ -14,7 +14,7 @@ const PlaceCard = (place: IPlace) => {
         <Typography variant="h5" component="div">
           {place.place_name}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography variant="subtitle2" sx={{ mb: 1.5 }} color="text.secondary">
           {place.category_name}
         </Typography>
         <Typography variant="body2">{place.address_name}</Typography>

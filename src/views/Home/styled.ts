@@ -2,7 +2,7 @@ import { Box, styled } from '@mui/material';
 
 export const HomeContainer = styled(Box)({
   position: 'relative',
-  height: '630px',
+  height: '100vh',
   display: 'flex',
   flexDirection: 'column',
   alitnItems: 'center',
@@ -33,9 +33,14 @@ export const UserPosCard = styled(Box)({
   minWidth: '250px',
   display: 'flex',
   padding: '0.3rem 0.4rem',
-  margin: '65px 0.3rem 0.3rem 0.3rem',
+  margin: '68px 0 0 0.8rem',
   color: 'rgba(0,0,0,0.8)',
   zIndex: 50,
   borderRadius: '0.5rem',
   backgroundColor: 'rgba(255,255,255,0.7)',
+  '&:hover': {
+    backgroundColor: 'white',
+    transform: 'scale(1.05)',
+    transition: 'transform 0.2s ease-in-out',
+  },
 });

@@ -5,6 +5,7 @@ import { MapMarker } from 'react-kakao-maps-sdk';
 // project imports
 import navigation from 'src/assets/images/navigation.png';
 import user from 'src/assets/images/user.png';
+import location_64 from 'src/assets/images/location_64.png';
 
 interface IMarker {
   position: {
@@ -17,10 +18,10 @@ const Marker = ({ position }: IMarker) => {
     <MapMarker
       position={position}
       image={{
-        src: user,
+        src: location_64,
         size: {
-          width: 32,
-          height: 32,
+          width: 64,
+          height: 64,
         },
       }}
     />
