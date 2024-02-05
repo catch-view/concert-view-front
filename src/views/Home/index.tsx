@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, styled } from '@mui/material';
+import { IconButton } from '@mui/material';
 
 // material icons
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
@@ -10,12 +10,13 @@ import PlacesDrawer from './PlacesDrawer';
 import useGeolocation from 'src/hooks/useGeolocation';
 import { useAppSelector, useAppDispatch } from 'src/store/hook';
 import {
-  setFocusingPosition,
+  setFocusingPlace,
   setUserPosition,
 } from 'src/store/features/map/mapSlice';
 import * as Styled from './styled';
+import { ViewContainer } from '../styled';
 
-const Home = () => {
+const HomeView = () => {
   const dispatch = useAppDispatch();
 
   // 우측 drawer show/hide 관련
@@ -39,7 +40,7 @@ const Home = () => {
   }, [loaded]);
 
   return (
-    <Styled.HomeContainer>
+    <ViewContainer>
       <Styled.MapHeader>
         <IconButton
           size="small"
@@ -56,13 +57,14 @@ const Home = () => {
       <Styled.MapContent>
         <Styled.UserPosCard
           onClick={() => {
-            dispatch(
-              setFocusingPosition({
+            /* dispatch(
+              setFocusingPlace({
+                ...focusingPlace
                 lat: coordinates?.lat || 0,
                 lng: coordinates?.lng || 0,
                 addressName: address,
               })
-            );
+            ); */
           }}
         >
           접속 위치: {address}
@@ -73,8 +75,8 @@ const Home = () => {
         />
         <KakaoMap />
       </Styled.MapContent>
-    </Styled.HomeContainer>
+    </ViewContainer>
   );
 };
 
-export default Home;
+export default HomeView;

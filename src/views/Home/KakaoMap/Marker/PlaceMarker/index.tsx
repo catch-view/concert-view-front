@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import { MapMarker } from 'react-kakao-maps-sdk';
 
 // project imports
-import navigation from 'src/assets/images/navigation.png';
-import user from 'src/assets/images/user.png';
+import PlaceOverlay from '../../PlaceOverlay';
+
+import { useAppSelector } from 'src/store/hook';
+
 import location_64 from 'src/assets/images/location_64.png';
 
 interface IMarker {
@@ -14,6 +15,8 @@ interface IMarker {
   };
 }
 const Marker = ({ position }: IMarker) => {
+  const { focusingPlace } = useAppSelector((state) => state.map);
+
   return (
     <MapMarker
       position={position}
@@ -24,7 +27,9 @@ const Marker = ({ position }: IMarker) => {
           height: 64,
         },
       }}
-    />
+    >
+      {focusingPlace.placeName && <PlaceOverlay {...focusingPlace} />}
+    </MapMarker>
   );
 };
 

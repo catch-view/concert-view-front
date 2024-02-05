@@ -2,31 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 
 // project imports
-import Marker from './Marker';
+import UserMarker from './Marker/UserMarker';
+import PlaceMarker from './Marker/PlaceMarker';
 import MapLoading from 'src/uis/Loadings/MapLoading';
 import { useAppSelector, useAppDispatch } from 'src/store/hook';
 import {
-  setFocusingPosition,
+  setFocusingPlace,
   setUserPosition,
 } from 'src/store/features/map/mapSlice';
 
 const KakaoMap = () => {
-  const { userPosition, focusingPosition } = useAppSelector(
-    (state) => state.map
-  );
+  const { userPosition, focusingPlace } = useAppSelector((state) => state.map);
   const dispatch = useAppDispatch();
 
   // 최초 렌더링 시 현재 사용자 접속 위치 focusing
   useEffect(() => {
-    dispatch(setFocusingPosition({ ...userPosition }));
+    dispatch(
+      setFocusingPlace({
+        ...focusingPlace,
+        lat: userPosition.lat,
+        lng: userPosition.lng,
+      })
+    );
   }, [userPosition]);
 
   return (
     <Map
       id="map"
       center={{
-        lat: focusingPosition.lat || 0,
-        lng: focusingPosition.lng || 0,
+        lat: focusingPlace.lat ?? 0,
+        lng: focusingPlace.lng ?? 0,
       }}
       isPanto={true}
       style={{
@@ -36,13 +41,23 @@ const KakaoMap = () => {
       }}
     >
       {/* 접속자 위치 마커 */}
-      <Marker
+      <UserMarker
         position={{
           // 마커 좌표
-          lat: focusingPosition?.lat || 0,
-          lng: focusingPosition?.lng || 0,
+          lat: userPosition?.lat ?? 0,
+          lng: userPosition?.lng ?? 0,
         }}
       />
+
+      {/* 포커싱 장소 마커 */}
+      {focusingPlace.placeName && (
+        <PlaceMarker
+          position={{
+            lat: focusingPlace?.lat ?? 0,
+            lng: focusingPlace?.lng ?? 0,
+          }}
+        />
+      )}
     </Map>
   );
 };

@@ -1,4 +1,4 @@
-export interface IPlace {
+export interface IKakaoPlace {
   address_name: string;
   category_group_code: string;
   category_group_name: string;

@@ -13,12 +13,12 @@ import PlaceCard from './PlaceCard';
 
 // redux
 import { useAppDispatch } from 'src/store/hook';
-import { setFocusingPosition } from 'src/store/features/map/mapSlice';
+import { setFocusingPlace } from 'src/store/features/map/mapSlice';
 
-import { IPlace } from './interface';
+import { IKakaoPlace } from './interface';
 
 interface IPlacesList {
-  places: IPlace[];
+  places: IKakaoPlace[];
 }
 const PlacesList = ({ places }: IPlacesList) => {
   const dispatch = useAppDispatch();
@@ -34,11 +34,20 @@ const PlacesList = ({ places }: IPlacesList) => {
         <ListItem
           key={place.id}
           onClick={() => {
+            console.log(place);
             dispatch(
-              setFocusingPosition({
+              setFocusingPlace({
+                addressName: place.address_name,
+                categoryGroupCode: place.category_group_code,
+                categoryGroupName: place.category_group_name,
+                distance: place.distance,
+                id: place.id,
+                phone: place.phone,
+                placeName: place.place_name,
+                placeUrl: place.place_url,
+                roadAddressName: place.road_address_name,
                 lat: Number(place.y),
                 lng: Number(place.x),
-                addressName: '',
               })
             );
           }}

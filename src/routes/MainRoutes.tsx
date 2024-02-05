@@ -2,7 +2,8 @@ import React from 'react';
 
 // project imports
 import MainLayout from 'src/layouts/MainLayout';
-import Home from 'src/views/Home';
+import HomeView from 'src/views/Home';
+import CreatePostView from 'src/views/Post/Create';
 
 const MainRoutes = {
   path: '/',
@@ -11,7 +12,11 @@ const MainRoutes = {
   children: [
     {
       path: '',
-      element: <Home />,
+      element: <HomeView />,
+    },
+    {
+      path: '/Post/Create',
+      element: <CreatePostView />,
     },
   ],
 };

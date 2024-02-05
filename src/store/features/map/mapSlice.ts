@@ -3,7 +3,7 @@ import { IPosition, IPlace } from './interface';
 
 interface IMapSliceState {
   userPosition: IPosition;
-  focusingPosition: IPosition;
+  focusingPlace: IPlace;
   drawerPlaces: IPlace[];
 }
 const initialState: IMapSliceState = {
@@ -12,10 +12,18 @@ const initialState: IMapSliceState = {
     lng: null,
     addressName: '',
   },
-  focusingPosition: {
+  focusingPlace: {
+    addressName: '',
+    categoryGroupCode: '',
+    categoryGroupName: '',
+    distance: '',
+    id: '',
+    phone: '',
+    placeName: '',
+    placeUrl: '',
+    roadAddressName: '',
     lat: null,
     lng: null,
-    addressName: '',
   },
   drawerPlaces: [],
 };
@@ -28,9 +36,8 @@ const mapSlice = createSlice({
       state.userPosition.lng = action.payload.lng;
     },
 
-    setFocusingPosition: (state, action: PayloadAction<IPosition>) => {
-      state.focusingPosition.lat = action.payload.lat;
-      state.focusingPosition.lng = action.payload.lng;
+    setFocusingPlace: (state, action: PayloadAction<IPlace>) => {
+      state.focusingPlace = action.payload;
     },
 
     setDrawerPlaces: (state, action: PayloadAction<IPlace[]>) => {
@@ -39,7 +46,7 @@ const mapSlice = createSlice({
   },
 });
 
-export const { setUserPosition, setFocusingPosition, setDrawerPlaces } =
+export const { setUserPosition, setFocusingPlace, setDrawerPlaces } =
   mapSlice.actions;
 
 export default mapSlice.reducer;

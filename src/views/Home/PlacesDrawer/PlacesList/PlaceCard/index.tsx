@@ -2,9 +2,9 @@ import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 
 // interfaces
-import { IPlace } from '../interface';
+import { IKakaoPlace } from '../interface';
 
-const PlaceCard = (place: IPlace) => {
+const PlaceCard = (place: IKakaoPlace) => {
   return (
     <Card sx={{ width: '100%', backgroundColor: 'white', cursor: 'pointer' }}>
       <CardContent>

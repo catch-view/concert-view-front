@@ -15,9 +15,9 @@ import {
 
 // icons
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import FoodBankIcon from '@mui/icons-material/FoodBank';
 
 // project imports
+import MenuList from './MenuList';
 import { ISidebarProps } from './interface';
 
 const drawerWidth = 240;
@@ -87,31 +87,7 @@ const AppSidebar = ({
 
       <Divider />
 
-      <List>
-        <ListItem disablePadding sx={{ display: 'block' }}>
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: showAppSidebar ? 'initial' : 'center',
-              px: 2.5,
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: showAppSidebar ? 3 : 'auto',
-                justifyContent: 'center',
-              }}
-            >
-              <FoodBankIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={'place'}
-              sx={{ opacity: showAppSidebar ? 1 : 0 }}
-            />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <MenuList showAppSidebar={showAppSidebar} />
     </MuiDrawer>
   );
 };

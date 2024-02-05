@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // project imports
 import PlacesList from './PlacesList';
-import { IPlace } from './PlacesList/interface';
+import { IKakaoPlace } from './PlacesList/interface';
 import * as Styled from './styled';
 
 interface IPlacesDrawer {
@@ -22,7 +22,7 @@ interface IPlacesDrawer {
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
   const ps = new kakao.maps.services.Places();
-  const [places, setPlaces] = useState<IPlace[]>([]);
+  const [places, setPlaces] = useState<IKakaoPlace[]>([]);
   const [pageData, setPageData] = useState<{
     curPage: number;
     totalPages: null | number;
@@ -36,7 +36,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
       '신문로2가 전시',
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-          const placesData = data as IPlace[];
+          const placesData = data as IKakaoPlace[];
           setPlaces(placesData);
         }
       },
@@ -49,7 +49,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
   useEffect(() => {
     ps.keywordSearch('신문로2가 전시', (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
-        const placesData = data as IPlace[];
+        const placesData = data as IKakaoPlace[];
         setPlaces(placesData);
         setPageData({ ...pageData, totalPages: _pagination.last });
       }
