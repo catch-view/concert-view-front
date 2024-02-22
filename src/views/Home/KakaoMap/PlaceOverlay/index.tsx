@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +17,7 @@ const PlaceOverlay = (place: IPlace) => {
         <Typography>리뷰 수: 23개</Typography>
 
         <Button size="small">
-          <Link to="post/create">test</Link>
+          <Link to={`/post/create/${place.id}`}>test</Link>
         </Button>
       </Styled.PlaceInfoBox>
     </Styled.Wrapper>

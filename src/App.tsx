@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   CssBaseline,
   StyledEngineProvider,
@@ -6,9 +5,10 @@ import {
 } from '@mui/material';
 
 // project imports
-import NavigationScroll from './layouts/MainLayout/NavigationScroll';
+import NavigationScroll from './components/layouts/MainLayout/NavigationScroll';
 import Routes from './routes';
 import theme from './themes';
+import SnackAlert from './components/common/SnackAlert';
 
 const App = () => {
   return (
@@ -18,6 +18,8 @@ const App = () => {
         <NavigationScroll>
           <Routes />
         </NavigationScroll>
+
+        <SnackAlert />
       </ThemeProvider>
     </StyledEngineProvider>
   );

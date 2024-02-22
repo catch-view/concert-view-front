@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 
 // project imports
 import UserMarker from './Marker/UserMarker';
 import PlaceMarker from './Marker/PlaceMarker';
-import MapLoading from 'src/uis/Loadings/MapLoading';
+import MapLoading from 'src/components/uis/Loadings/MapLoading';
 import { useAppSelector, useAppDispatch } from 'src/store/hook';
 import {
   setFocusingPlace,

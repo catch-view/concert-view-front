@@ -1,7 +1,5 @@
-import React from 'react';
-
 // project imports
-import MainLayout from 'src/layouts/MainLayout';
+import MainLayout from 'src/components/layouts/MainLayout';
 import HomeView from 'src/views/Home';
 import CreatePostView from 'src/views/Post/Create';
 
@@ -15,7 +13,7 @@ const MainRoutes = {
       element: <HomeView />,
     },
     {
-      path: '/Post/Create',
+      path: '/Post/Create/:id',
       element: <CreatePostView />,
     },
   ],

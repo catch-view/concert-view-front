@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { Map } from 'react-kakao-maps-sdk';
 
 // project imports
-import MapLoading from 'src/uis/Loadings/MapLoading';
+import MapLoading from 'src/components/uis/Loadings/MapLoading';
 import { useAppDispatch } from 'src/store/hook';
 import useGeolocation from 'src/hooks/useGeolocation';
 import { setUserPosition } from 'src/store/features/map/mapSlice';
