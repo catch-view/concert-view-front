@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
-import { Box, Fab } from '@mui/material';
+import { Box, Fab, TextField } from '@mui/material';
+import { Formik, useFormik } from 'formik';
 import QuillEditor from 'src/components/common/QuillEditor';
 import 'react-quill/dist/quill.snow.css';
 
@@ -10,50 +10,56 @@ import SaveIcon from '@mui/icons-material/Save';
 
 // project imports
 import { ViewContainer } from 'src/views/styled';
-import TextField from 'src/components/common/hookForm/TextField';
+import { DisplayingErrorMessagesSchema } from './schemas';
 
 const CreatePostView = () => {
-  const { control, watch } = useForm({
-    defaultValues: { author: '', password: '' },
+  const formik = useFormik({
+    initialValues: {
+      author: '',
+      password: '',
+    },
+    validationSchema: DisplayingErrorMessagesSchema,
+    onSubmit: (values) => {
+      // same shape as initial values
+      console.log(values);
+    },
   });
 
-  const author = watch('author');
-  const password = watch('password');
-
-  const [postData, setPostData] = useState({
-    author: author,
-    password: '',
-    createdAt: '',
-    htmlValue: '',
-  });
+  const [htmlValue, setHtmlValue] = useState<string>('');
 
   const handleEditorValuechange = useCallback((value: string) => {
-    setPostData({
-      ...postData,
-      htmlValue: value,
-    });
+    console.log(formik.values);
+    setHtmlValue(value);
   }, []);
+
+  /**
+   * 게시물 저장 메서드
+   */
+  /*  const handleSubmit = () => {
+    if (!author || !password || !htmlValue) return;
+  }; */
 
   return (
     <ViewContainer>
       <Box sx={{ marginTop: '1rem' }}>
         <TextField
           name="author"
-          control={control}
           label="작성자"
+          color="success"
           sx={{ marginRight: '1rem' }}
+          value={formik.values.author}
+          onChange={formik.handleChange}
         />
         <TextField
           name="password"
-          control={control}
+          color="success"
           type="password"
           label="비밀번호"
+          value={formik.values.password}
+          onChange={formik.handleChange}
         />
       </Box>
-      <QuillEditor
-        htmlValue={postData.htmlValue}
-        onChange={handleEditorValuechange}
-      />
+      <QuillEditor htmlValue={htmlValue} onChange={handleEditorValuechange} />
 
       <Box
         sx={
@@ -68,7 +74,7 @@ const CreatePostView = () => {
         </Fab>
 
         {/* 게시글 등록 버튼 */}
-        <Fab color="success" sx={{}}>
+        <Fab type="submit" color="success" sx={{}}>
           <SaveIcon />
         </Fab>
       </Box>

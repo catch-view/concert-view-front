@@ -1,13 +1,15 @@
 import { useRef, useMemo, useState, memo } from 'react';
+import { uploadBytes, getDownloadURL, ref } from 'firebase/storage';
 import { Box, styled } from '@mui/material';
+
+// project imports
+import { storage } from 'src/firebase';
 
 // react-quill
 import ReactQuill, { Quill } from 'react-quill';
 import { ImageResize } from 'quill-image-resize-module-ts';
 import 'react-quill/dist/quill.snow.css';
 import { quillConfig } from './quillConfig';
-
-import { uploadPostImage } from 'src/apis/post';
 
 Quill.register('modules/ImageResize', ImageResize);
 
@@ -35,11 +37,21 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
       const file = input.files ? input.files[0] : null;
       if (!editor || !file || !range) return;
 
-      const html = quillRef.current?.value as string;
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('html', html);
-      const result = await uploadPostImage(formData);
+      try {
+        // 파일명을 "image/Date.now()"로 저장
+        const storageRef = ref(storage, `image/${Date.now()}`);
+        // Firebase Method : uploadBytes, getDownloadURL
+        await uploadBytes(storageRef, file).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            // 이미지 URL 에디터에 삽입
+            editor.insertEmbed(range.index, 'image', url);
+            // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
+            editor.setSelection(range.index, range.index + 1);
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
     });
   };
 
