@@ -20,17 +20,20 @@ const CreatePostView = () => {
     },
     validationSchema: DisplayingErrorMessagesSchema,
     onSubmit: (values) => {
-      // same shape as initial values
-      console.log(values);
+      console.log(values, htmlValue, 'TEST');
     },
+    enableReinitialize: true,
   });
 
   const [htmlValue, setHtmlValue] = useState<string>('');
 
   const handleEditorValuechange = useCallback((value: string) => {
-    console.log(formik.values);
     setHtmlValue(value);
   }, []);
+
+  const testFunc = () => {
+    console.log(formik.values.author, formik.values.password);
+  };
 
   /**
    * 게시물 저장 메서드
@@ -43,20 +46,25 @@ const CreatePostView = () => {
     <ViewContainer>
       <Box sx={{ marginTop: '1rem' }}>
         <TextField
+          id="author"
           name="author"
           label="작성자"
           color="success"
           sx={{ marginRight: '1rem' }}
           value={formik.values.author}
           onChange={formik.handleChange}
+          error={Boolean(formik.errors.author)}
+          helperText={formik.errors.author}
         />
         <TextField
+          id="pasword"
           name="password"
           color="success"
           type="password"
           label="비밀번호"
           value={formik.values.password}
           onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
         />
       </Box>
       <QuillEditor htmlValue={htmlValue} onChange={handleEditorValuechange} />
@@ -74,7 +82,13 @@ const CreatePostView = () => {
         </Fab>
 
         {/* 게시글 등록 버튼 */}
-        <Fab type="submit" color="success" sx={{}}>
+        <Fab
+          onClick={() => {
+            formik.submitForm();
+          }}
+          color="success"
+          sx={{}}
+        >
           <SaveIcon />
         </Fab>
       </Box>
