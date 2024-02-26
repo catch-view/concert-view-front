@@ -1,14 +1,19 @@
 import { apiInstance } from 'src/plugins/axios';
+import { SuccessResponse } from 'src/interfaces/Success.response';
 
 interface CreatePostDto {
+  placeID: string;
   author: string;
   password: string;
-  htmlValue: string;
+  html: string;
   createdAt: string;
 }
-export const createPost = (Post: CreatePostDto) => {
-  return apiInstance.post('post/create', {
+export const createPost = async (
+  Post: CreatePostDto
+): Promise<SuccessResponse> => {
+  const { data } = await apiInstance.post('post/create', {
     ...Post,
-    createdAt: Date.now(),
   });
+
+  return data;
 };
