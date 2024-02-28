@@ -7,6 +7,10 @@ interface ILocationType {
   error?: { code: number; message: string };
 }
 
+/**
+ * geoLocation을 통해 클라이언트 location 정보를 가져오기 위한 hook
+ * @returns 클라이언트 위치정보
+ */
 const useGeolocation = () => {
   const [location, setLocation] = useState<ILocationType>({
     loaded: false,

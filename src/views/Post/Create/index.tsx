@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Box, Fab, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-import { useMutation } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // icons
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -10,23 +9,26 @@ import SaveIcon from '@mui/icons-material/Save';
 
 // project imports
 import LoadingDialog from 'src/components/common/LoadingDialog';
+import PostTag from 'src/components/atoms/PostTag';
 import { ViewContainer } from 'src/views/styled';
 import { DisplayingErrorMessagesSchema } from './schemas';
-import { createPost } from 'src/apis/post';
 import QuillEditor from 'src/components/common/QuillEditor';
 import useSnackAlert from 'src/hooks/useSnackAlert';
+import { useCreatePostMutation } from 'src/tanstack/mutations/post';
+import * as Styled from './styled';
 
 const CreatePostView = () => {
   const { activateSnack } = useSnackAlert();
-  const { mutateAsync, status } = useMutation({ mutationFn: createPost });
+  const { mutateAsync, status } = useCreatePostMutation();
 
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       author: '',
       password: '',
+      tags: [],
     },
     validationSchema: DisplayingErrorMessagesSchema,
     onSubmit: (values) => {
@@ -51,7 +53,7 @@ const CreatePostView = () => {
    */
   const handleSubmit = async () => {
     const { result, message } = await mutateAsync({
-      placeID: location.pathname.split('/').at(-1) || '',
+      placeID: id || '',
       author: formik.values.author,
       password: formik.values.password,
       html: htmlValue,
@@ -59,19 +61,14 @@ const CreatePostView = () => {
     });
     if (result) {
       activateSnack(message || '', 'success');
-      navigate('/');
+      navigate(`/Post/${id}`);
     } else {
       activateSnack(message || '', 'danger');
     }
   };
 
-  const testFunc = () => {
-    console.log(
-      formik.touched.author,
-      formik.touched.password,
-      formik.values.author,
-      formik.values.password
-    );
+  const addTag = () => {
+    //formik.values.tags.push()
   };
 
   return (
@@ -111,6 +108,14 @@ const CreatePostView = () => {
           }
         />
       </Box>
+
+      <Styled.TagsArea>
+        <TextField variant="standard" id="tag" name="tag" label="#태그😁" />
+        <Styled.TagsBox>
+          <PostTag label="테스트" />
+        </Styled.TagsBox>
+      </Styled.TagsArea>
+
       <QuillEditor htmlValue={htmlValue} onChange={handleEditorValuechange} />
 
       <Box
@@ -121,7 +126,7 @@ const CreatePostView = () => {
         }
       >
         {/* 게시글 작성 취소 버튼 */}
-        <Fab color="default" sx={{ marginRight: '0.5rem' }} onClick={testFunc}>
+        <Fab color="default" sx={{ marginRight: '0.5rem' }}>
           <CancelIcon />
         </Fab>
 

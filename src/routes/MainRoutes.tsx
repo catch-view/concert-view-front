@@ -1,6 +1,7 @@
 // project imports
 import MainLayout from 'src/components/layouts/MainLayout';
 import HomeView from 'src/views/Home';
+import PostView from 'src/views/Post';
 import CreatePostView from 'src/views/Post/Create';
 
 const MainRoutes = {
@@ -11,6 +12,10 @@ const MainRoutes = {
     {
       path: '',
       element: <HomeView />,
+    },
+    {
+      path: '/Post/:id',
+      element: <PostView />,
     },
     {
       path: '/Post/Create/:id',

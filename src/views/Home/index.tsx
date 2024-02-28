@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 
 // material icons
@@ -8,11 +8,8 @@ import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 import KakaoMap from './KakaoMap';
 import PlacesDrawer from './PlacesDrawer';
 import useGeolocation from 'src/hooks/useGeolocation';
-import { useAppSelector, useAppDispatch } from 'src/store/hook';
-import {
-  setFocusingPlace,
-  setUserPosition,
-} from 'src/store/features/map/mapSlice';
+import { useAppDispatch } from 'src/store/hook';
+import { setUserPosition } from 'src/store/features/map/mapSlice';
 import * as Styled from './styled';
 import { ViewContainer } from '../styled';
 
@@ -42,19 +39,6 @@ const HomeView = () => {
   return (
     <ViewContainer>
       <Styled.MapHeader>
-        <IconButton
-          size="small"
-          sx={{
-            display: showPlacesDrawer ? 'none' : '',
-            zIndex: 60,
-          }}
-          onClick={toggleShowPlacesDrawer}
-        >
-          <HolidayVillageIcon />
-        </IconButton>
-      </Styled.MapHeader>
-
-      <Styled.MapContent>
         <Styled.UserPosCard
           onClick={() => {
             /* dispatch(
@@ -69,6 +53,19 @@ const HomeView = () => {
         >
           접속 위치: {address}
         </Styled.UserPosCard>
+        <IconButton
+          size="small"
+          sx={{
+            display: showPlacesDrawer ? 'none' : '',
+            zIndex: 60,
+          }}
+          onClick={toggleShowPlacesDrawer}
+        >
+          <HolidayVillageIcon />
+        </IconButton>
+      </Styled.MapHeader>
+
+      <Styled.MapContent>
         <PlacesDrawer
           open={showPlacesDrawer}
           toggleOpenDrawer={toggleShowPlacesDrawer}
