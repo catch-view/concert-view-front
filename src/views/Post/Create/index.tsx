@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
-import { Box, Fab, TextField } from '@mui/material';
+import { Box, Fab, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import randomColor from 'randomcolor';
 
 // icons
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -16,32 +17,31 @@ import QuillEditor from 'src/components/common/QuillEditor';
 import useSnackAlert from 'src/hooks/useSnackAlert';
 import { useCreatePostMutation } from 'src/tanstack/mutations/post';
 import * as Styled from './styled';
+import { Tag } from 'src/interfaces/post';
 
 const CreatePostView = () => {
   const { activateSnack } = useSnackAlert();
   const { mutateAsync, status } = useCreatePostMutation();
 
   const { id } = useParams();
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       author: '',
       password: '',
-      tags: [],
+      inputTag: '',
     },
     validationSchema: DisplayingErrorMessagesSchema,
     onSubmit: (values) => {
-      /* if (Boolean(formik.errors.author) || Boolean(formik.errors.password)) {
-        activateSnack('입력 정보를 확인해주세요', 'danger');
-        return;
-      } */
       handleSubmit();
     },
     enableReinitialize: false,
     validateOnBlur: true,
   });
 
+  const [tags, setTags] = useState<Tag[]>([]);
   const [htmlValue, setHtmlValue] = useState<string>('');
 
   const handleEditorValuechange = useCallback((value: string) => {
@@ -53,7 +53,10 @@ const CreatePostView = () => {
    */
   const handleSubmit = async () => {
     const { result, message } = await mutateAsync({
-      placeID: id || '',
+      placeID: state.placeID,
+      placeName: state.placeName,
+      placeAddress: state.placeAddress,
+      tags: tags,
       author: formik.values.author,
       password: formik.values.password,
       html: htmlValue,
@@ -68,14 +71,29 @@ const CreatePostView = () => {
   };
 
   const addTag = () => {
-    //formik.values.tags.push()
+    const newTag: Tag = {
+      label: formik.values.inputTag,
+      bgColor: randomColor(),
+      color: 'black',
+    };
+    setTags([...tags, newTag]);
+    formik.values.inputTag = '';
   };
 
   return (
     <ViewContainer>
       {status === 'pending' && <LoadingDialog />}
-      <Box sx={{ marginTop: '1rem' }}>
+      <Styled.TopTextBox>
+        <Typography variant="h5" color={'rgba(0,0,0,0.5)'}>
+          #{state.placeName}&nbsp;
+        </Typography>
+        <Typography variant="h6" color={'rgba(0,0,0,0.3)'}>
+          #{state.addressName}
+        </Typography>
+      </Styled.TopTextBox>
+      <Styled.TextFieldsBox>
         <TextField
+          size="small"
           id="author"
           name="author"
           label="작성자"
@@ -92,6 +110,7 @@ const CreatePostView = () => {
           }
         />
         <TextField
+          size="small"
           id="pasword"
           name="password"
           label="비밀번호"
@@ -107,14 +126,33 @@ const CreatePostView = () => {
             Boolean(formik.values.password.length) && formik.errors.password
           }
         />
-      </Box>
 
-      <Styled.TagsArea>
-        <TextField variant="standard" id="tag" name="tag" label="#태그😁" />
+        <TextField
+          size="small"
+          variant="standard"
+          id="inputTag"
+          name="inputTag"
+          label="#태그😁"
+          color="info"
+          value={formik.values.inputTag}
+          onChange={formik.handleChange}
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') addTag();
+          }}
+          error={
+            Boolean(formik.values.inputTag.length) &&
+            Boolean(formik.errors.inputTag)
+          }
+          helperText={
+            Boolean(formik.values.inputTag.length) && formik.errors.inputTag
+          }
+        />
         <Styled.TagsBox>
-          <PostTag label="테스트" />
+          {tags.map((tag: Tag, idx: number) => (
+            <PostTag key={idx} label={tag.label} bgColor={tag.bgColor} />
+          ))}
         </Styled.TagsBox>
-      </Styled.TagsArea>
+      </Styled.TextFieldsBox>
 
       <QuillEditor htmlValue={htmlValue} onChange={handleEditorValuechange} />
 
@@ -136,7 +174,6 @@ const CreatePostView = () => {
             formik.submitForm();
           }}
           color="success"
-          sx={{}}
         >
           <SaveIcon />
         </Fab>

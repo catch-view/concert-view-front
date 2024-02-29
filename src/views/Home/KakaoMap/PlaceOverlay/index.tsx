@@ -17,8 +17,17 @@ const PlaceOverlay = (place: IPlace) => {
         <Typography variant="h6">{place.placeName}</Typography>
         <Typography>리뷰 수: 23개</Typography>
 
-        <Button size="small">
-          <Link to={`/post/create/${place.id}`}>test</Link>
+        <Button size="small" variant="outlined" color="primary">
+          <Link
+            to={`/post/create/${place.id}`}
+            state={{
+              placeID: place.id,
+              placeName: place.placeName,
+              addressName: place.addressName,
+            }}
+          >
+            작성하기
+          </Link>
         </Button>
       </Styled.PlaceInfoBox>
     </Styled.Wrapper>

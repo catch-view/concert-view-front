@@ -4,7 +4,7 @@ import { Tag } from 'src/interfaces/post';
 const PostTag = ({ label, bgColor, color }: Tag) => {
   return (
     <Chip
-      label={label ? '#' + label : '응애'}
+      label={'#' + label}
       sx={{
         backgroundColor: bgColor ? bgColor : 'rgba(0,0,0,0.2)',
         color: color ? color : 'black',
@@ -12,6 +12,7 @@ const PostTag = ({ label, bgColor, color }: Tag) => {
         '&:hover': {
           transform: 'scale(1.1)',
         },
+        margin: '0 0.2rem',
       }}
     />
   );

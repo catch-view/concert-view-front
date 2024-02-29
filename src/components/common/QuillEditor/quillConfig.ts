@@ -24,5 +24,5 @@ export const quillConfig = {
     'blockquote',
     'code-block',
   ],
-  placeholder: 'Write something...',
+  placeholder: '내용을 작성하세요',
 };

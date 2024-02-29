@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState, memo } from 'react';
+import { useRef, useMemo, memo } from 'react';
 import { uploadBytes, getDownloadURL, ref } from 'firebase/storage';
 import { Box, styled } from '@mui/material';
 
@@ -15,6 +15,9 @@ Quill.register('modules/ImageResize', ImageResize);
 
 const EditorWrapper = styled(Box)({
   height: '580px',
+  '& .ql-snow *': {
+    fontFamily: 'Noto Serif KR',
+  },
 });
 
 interface QuillEditorProps {
@@ -50,7 +53,7 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
           });
         });
       } catch (error) {
-        console.log(error);
+        alert(error);
       }
     });
   };
@@ -90,6 +93,7 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
         style={{
           margin: '0.5rem',
           border: 'none',
+          width: '680px',
           height: '500px',
         }}
         ref={quillRef}

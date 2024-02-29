@@ -1,10 +1,14 @@
 import { apiInstance } from 'src/plugins/axios';
 import { SuccessResponse } from 'src/interfaces/Success.response';
+import { Tag } from 'src/interfaces/post';
 
 interface CreatePostDto {
   placeID: string;
+  placeName: string;
+  placeAddress: string;
   author: string;
   password: string;
+  tags?: Tag[];
   html: string;
   createdAt: string;
 }

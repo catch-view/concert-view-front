@@ -10,5 +10,8 @@ export const DisplayingErrorMessagesSchema = Yup.object().shape({
   password: Yup.string()
     .length(4, '비밀번호는 네자리로 입력해주세요')
     .required('비밀번호를 입력해주세요'),
-  tags: Yup.array().of(Yup.object().shape(Tag)),
+  inputTag: Yup.string()
+    .min(2, '최소 두글자 태그를 입력해주세요')
+    .max(6, '최대 여섯자까지 입력 가능합니다')
+    .matches(/^[가-힣|]+$/, '한글만 입력 가능합니다'),
 });
