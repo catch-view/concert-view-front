@@ -3,6 +3,7 @@ import MainLayout from 'src/components/layouts/MainLayout';
 import HomeView from 'src/views/Home';
 import PostView from 'src/views/Post';
 import CreatePostView from 'src/views/Post/Create';
+import PostDetailView from 'src/views/Post/Detail';
 
 const MainRoutes = {
   path: '/',
@@ -20,6 +21,10 @@ const MainRoutes = {
     {
       path: '/Post/Create/:id',
       element: <CreatePostView />,
+    },
+    {
+      path: '/Post/Detail/:id',
+      element: <PostDetailView />,
     },
   ],
 };

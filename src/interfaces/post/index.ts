@@ -1,11 +1,12 @@
 export interface Post {
   postID: string;
   placeID: string;
-  placeName: string;
   author: string;
+  images: string[];
+  title: string;
   html: string;
   createdAt: string;
-  tags: [string];
+  tags: Tag[];
 }
 
 export interface Tag {

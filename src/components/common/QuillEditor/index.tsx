@@ -1,4 +1,4 @@
-import { useRef, useMemo, memo } from 'react';
+import { useRef, useMemo, memo, Dispatch, SetStateAction } from 'react';
 import { uploadBytes, getDownloadURL, ref } from 'firebase/storage';
 import { Box, styled } from '@mui/material';
 
@@ -14,7 +14,6 @@ import { quillConfig } from './quillConfig';
 Quill.register('modules/ImageResize', ImageResize);
 
 const EditorWrapper = styled(Box)({
-  height: '580px',
   '& .ql-snow *': {
     fontFamily: 'Noto Serif KR',
   },
@@ -22,9 +21,16 @@ const EditorWrapper = styled(Box)({
 
 interface QuillEditorProps {
   htmlValue: string;
+  images: string[];
+  setImages: Dispatch<React.SetStateAction<string[]>>;
   onChange: (content: string) => void;
 }
-const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
+const QuillEditor = ({
+  images,
+  setImages,
+  htmlValue,
+  onChange,
+}: QuillEditorProps) => {
   const quillRef = useRef<ReactQuill>(null);
 
   // quill-editor 커스텀 이미지 핸들러
@@ -46,6 +52,7 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
         // Firebase Method : uploadBytes, getDownloadURL
         await uploadBytes(storageRef, file).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
+            setImages((current) => [...current, url]);
             // 이미지 URL 에디터에 삽입
             editor.insertEmbed(range.index, 'image', url);
             // URL 삽입 후 커서를 이미지 뒷 칸으로 이동
@@ -57,19 +64,6 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
       }
     });
   };
-
-  /**
-   * 게시글 작성 취소 버튼 클릭 처리 메소드
-   * firebase에 등록된 게시글 이미지들을 모두 제거
-   */
-  /* const handleCancelBtnClick = () => {
-    activateSnack('포스트 작성을 취소하시겠습니까?', 'danger');
-    postImages.forEach(async (imagePath) => {
-      const imgRef = ref(storage, imagePath);
-      // Delete the file
-      await deleteObject(imgRef);
-    });
-  }; */
 
   // quill-editor 모듈
   const modules = useMemo(() => {
@@ -94,7 +88,7 @@ const QuillEditor = ({ htmlValue, onChange }: QuillEditorProps) => {
           margin: '0.5rem',
           border: 'none',
           width: '680px',
-          height: '500px',
+          height: '580px',
         }}
         ref={quillRef}
         theme={quillConfig.theme}

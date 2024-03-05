@@ -4,11 +4,11 @@ import { Tag } from 'src/interfaces/post';
 
 interface CreatePostDto {
   placeID: string;
-  placeName: string;
-  placeAddress: string;
   author: string;
   password: string;
   tags?: Tag[];
+  images: string[];
+  title: string;
   html: string;
   createdAt: string;
 }
@@ -29,18 +29,14 @@ export const createPost = async (
 
 interface GetPostsDto {
   placeID: string;
-  offset: number;
-  limit: number;
 }
 /**
  * 게시물 조회 요청 메서드
  * @param GetPostsDto
  * @returns 장소 관련 게시물 목록
  */
-export const getPosts = async (getPostsDto: GetPostsDto) => {
-  const { data } = await apiInstance.get('post', {
-    params: { ...getPostsDto },
-  });
+export const getPosts = async (placeID: string) => {
+  const { data } = await apiInstance.get(`post/${placeID}`);
 
   return data;
 };

@@ -4,6 +4,7 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // project imports
 import NavigationScroll from './components/layouts/MainLayout/NavigationScroll';
@@ -25,6 +26,7 @@ const App = () => {
           <SnackAlert />
         </ThemeProvider>
       </StyledEngineProvider>
+      <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider>
   );
 };

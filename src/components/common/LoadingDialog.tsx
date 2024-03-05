@@ -1,23 +1,16 @@
-import { Container, CircularProgress } from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 
-const LoadingDialog = () => {
+interface Props {
+  open: boolean;
+}
+const LoadingDialog = ({ open }: Props) => {
   return (
-    <Container
-      sx={{
-        position: 'fixed',
-        /* top: 0,
-        left: 0, */
-        width: '100vh',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255,255,255,0.7)',
-        zIndex: 9999,
-      }}
+    <Backdrop
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={open}
     >
-      <CircularProgress size={100} />
-    </Container>
+      <CircularProgress color="inherit" />
+    </Backdrop>
   );
 };
 

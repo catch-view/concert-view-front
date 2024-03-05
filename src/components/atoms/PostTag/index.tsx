@@ -1,7 +1,10 @@
 import { Chip } from '@mui/material';
 import { Tag } from 'src/interfaces/post';
 
-const PostTag = ({ label, bgColor, color }: Tag) => {
+interface PostTag extends Tag {
+  onDelete?: any;
+}
+const PostTag = ({ label, bgColor, color, onDelete }: PostTag) => {
   return (
     <Chip
       label={'#' + label}
@@ -12,8 +15,9 @@ const PostTag = ({ label, bgColor, color }: Tag) => {
         '&:hover': {
           transform: 'scale(1.1)',
         },
-        margin: '0 0.2rem',
+        margin: '0.2rem',
       }}
+      onDelete={onDelete ? onDelete : undefined}
     />
   );
 };
