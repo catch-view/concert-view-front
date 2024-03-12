@@ -7,10 +7,10 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // project imports
-import NavigationScroll from './components/layouts/MainLayout/NavigationScroll';
+import NavigationScroll from 'src/features/ui/components/NavigationScroll';
 import Routes from './routes';
-import theme from './themes';
-import SnackAlert from './components/common/SnackAlert';
+import theme from 'src/shared/styles/themes';
+import SnackAlert from 'src/shared/components/SnackAlert';
 
 const App = () => {
   const queryClient = new QueryClient();

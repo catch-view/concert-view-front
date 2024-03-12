@@ -7,7 +7,7 @@ import App from './App';
 import store from './store';
 
 // css
-import 'src/shared/styles';
+import 'src/shared/styles/css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

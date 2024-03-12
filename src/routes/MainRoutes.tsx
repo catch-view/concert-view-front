@@ -1,18 +1,18 @@
 // project imports
-import MainLayout from 'src/components/layouts/MainLayout';
-import HomeView from 'src/views/Home';
-import PostView from 'src/views/Post';
-import CreatePostView from 'src/views/Post/Create';
-import PostDetailView from 'src/views/Post/Detail';
+import DefaultLayout from 'src/features/ui/components/layouts/DefaultLayout';
+import MapView from 'src/features/map/views/Map';
+import PostView from 'src/features/post/views/ListView';
+import CreatePostView from 'src/features/post/views/CreateView';
+import PostDetailView from 'src/features/post/views/DetailView';
 
 const MainRoutes = {
   path: '/',
   // eslint-disable-next-line react/react-in-jsx-scope
-  element: <MainLayout />,
+  element: <DefaultLayout />,
   children: [
     {
       path: '',
-      element: <HomeView />,
+      element: <MapView />,
     },
     {
       path: '/Post/:id',
