@@ -1,16 +1,18 @@
-import { Box, styled } from '@mui/material';
+import { Box, Card, CardContent, styled } from '@mui/material';
 
-export const Wrapper = styled(Box)({
-  display: 'flex',
-  width: '300px',
-  height: 'fit-content',
-  borderRadius: '0.5rem',
-  cursor: 'pointer',
+export const OverlayCard = styled(Card)({
+  width: '320px',
+  backgroundColor: 'white',
 });
 
-export const PlaceInfoBox = styled(Box)({
+export const OverlayCardContent = styled(CardContent)({
+  '& .bottom': {
+    textAlign: 'left',
+  },
+});
+
+export const BtnBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-  flexWrap: 'wrap',
-  overflowY: 'scroll',
+  gap: 1,
 });

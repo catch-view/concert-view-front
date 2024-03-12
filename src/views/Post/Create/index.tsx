@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 
 // project imports
-import LoadingDialog from 'src/components/common/LoadingDialog';
+import LoadingDialog from 'src/components/common/Loading/LoadingDialog';
 import PostTag from 'src/components/atoms/PostTag';
 import { ViewContainer } from 'src/views/styled';
 import { DisplayingErrorMessagesSchema } from './schemas';
@@ -36,7 +36,8 @@ const CreatePostView = () => {
     },
     validationSchema: DisplayingErrorMessagesSchema,
     onSubmit: (values) => {
-      handleSubmit();
+      formik.handleSubmit();
+      //handleSubmit();
     },
     enableReinitialize: false,
     validateOnBlur: true,

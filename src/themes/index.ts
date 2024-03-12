@@ -5,7 +5,7 @@ const theme = (mode: string) => {
   const themeOptions: ThemeOptions = {
     palette: Palatte(),
     typography: {
-      fontFamily: `"Noto Serif KR", serif`,
+      fontFamily: 'Noto Serif KR',
     },
   };
 

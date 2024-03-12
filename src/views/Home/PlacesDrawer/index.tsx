@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
 import {
   Box,
   IconButton,
@@ -10,15 +11,18 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 // project imports
+import { useAppSelector } from 'src/store/hook';
 import PlacesList from './PlacesList';
 import { IKakaoPlace } from './PlacesList/interface';
 import * as Styled from './styled';
+import { DisplayingErrorMessagesSchema } from './schemas';
 
 interface IPlacesDrawer {
   open: boolean;
   toggleOpenDrawer: () => void;
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
+  const { userPosition } = useAppSelector((state) => state.map);
   const ps = new kakao.maps.services.Places();
   const [places, setPlaces] = useState<IKakaoPlace[]>([]);
   const [pageData, setPageData] = useState<{
@@ -29,9 +33,23 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
     totalPages: null,
   });
 
+  const formik = useFormik({
+    initialValues: {
+      searchQuery: '',
+    },
+    validationSchema: DisplayingErrorMessagesSchema,
+    onSubmit: (values) => {
+      () => {
+        return;
+      };
+    },
+    enableReinitialize: false,
+    validateOnBlur: true,
+  });
+
   const handlePageClick = (page: number) => {
     ps.keywordSearch(
-      '신문로2가 전시',
+      userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
           const placesData = data as IKakaoPlace[];
@@ -44,15 +62,21 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
     );
   };
 
-  useEffect(() => {
-    ps.keywordSearch('신문로2가 전시', (data, status, _pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const placesData = data as IKakaoPlace[];
-        setPlaces(placesData);
-        setPageData({ ...pageData, totalPages: _pagination.last });
+  /**
+   * 장소 검색 메서드
+   */
+  const searchPlaces = () => {
+    ps.keywordSearch(
+      userPosition.addressName + formik.values.searchQuery,
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const placesData = data as IKakaoPlace[];
+          setPlaces(placesData);
+          setPageData({ ...pageData, totalPages: _pagination.last });
+        }
       }
-    });
-  }, []);
+    );
+  };
 
   return (
     <Styled.DrawerBox open={open}>
@@ -74,9 +98,23 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
 
       {/* contents */}
       <TextField
-        id="filled-basic"
+        id="searchQuery"
         label="장소 키워드를 검색해보세요"
         variant="filled"
+        name="searchQuery"
+        color="info"
+        value={formik.values.searchQuery}
+        onChange={formik.handleChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') searchPlaces();
+        }}
+        error={
+          Boolean(formik.values.searchQuery.length) &&
+          Boolean(formik.errors.searchQuery)
+        }
+        helperText={
+          Boolean(formik.values.searchQuery.length) && formik.errors.searchQuery
+        }
       />
       <PlacesList places={places} />
 

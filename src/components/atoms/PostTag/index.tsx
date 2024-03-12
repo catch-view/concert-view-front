@@ -2,9 +2,10 @@ import { Chip } from '@mui/material';
 import { Tag } from 'src/interfaces/post';
 
 interface PostTag extends Tag {
+  onChipClick?: any;
   onDelete?: any;
 }
-const PostTag = ({ label, bgColor, color, onDelete }: PostTag) => {
+const PostTag = ({ label, bgColor, color, onChipClick, onDelete }: PostTag) => {
   return (
     <Chip
       label={'#' + label}
@@ -17,6 +18,7 @@ const PostTag = ({ label, bgColor, color, onDelete }: PostTag) => {
         },
         margin: '0.2rem',
       }}
+      onClick={onChipClick ? onChipClick : undefined}
       onDelete={onDelete ? onDelete : undefined}
     />
   );

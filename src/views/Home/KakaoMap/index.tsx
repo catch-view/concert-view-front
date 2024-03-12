@@ -6,10 +6,7 @@ import UserMarker from './Marker/UserMarker';
 import PlaceMarker from './Marker/PlaceMarker';
 import MapLoading from 'src/components/uis/Loadings/MapLoading';
 import { useAppSelector, useAppDispatch } from 'src/store/hook';
-import {
-  setFocusingPlace,
-  setUserPosition,
-} from 'src/store/features/map/mapSlice';
+import { setFocusingPlace } from 'src/store/features/map/mapSlice';
 
 const KakaoMap = () => {
   const { userPosition, focusingPlace } = useAppSelector((state) => state.map);

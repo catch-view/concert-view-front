@@ -34,6 +34,7 @@ const mapSlice = createSlice({
     setUserPosition: (state, action: PayloadAction<IPosition>) => {
       state.userPosition.lat = action.payload.lat;
       state.userPosition.lng = action.payload.lng;
+      state.userPosition.addressName = action.payload.addressName;
     },
 
     setFocusingPlace: (state, action: PayloadAction<IPlace>) => {

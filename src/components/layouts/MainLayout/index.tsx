@@ -8,12 +8,12 @@ import { useAppDispatch, useAppSelector } from 'src/store/hook';
 import { toggleShowAppSidebar as toggle } from 'src/store/features/uis/uisSlice';
 import { drawerWidth } from 'src/store/constant';
 
-interface IStyledMainProps {
+interface StyledMainProps {
   open: boolean;
 }
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
-})<IStyledMainProps>(({ theme, open }) => ({
+})<StyledMainProps>(({ theme, open }) => ({
   //...theme.typography.mainContent,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,

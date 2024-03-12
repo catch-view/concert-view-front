@@ -1,36 +1,54 @@
-import { Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Typography, Button, Divider, Rating, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import { IPlace } from 'src/store/features/map/interface';
 import * as Styled from './styled';
 
 const PlaceOverlay = (place: IPlace) => {
-  return (
-    <Styled.Wrapper>
-      <img
-        src="https://images.unsplash.com/photo-1495562569060-2eec283d3391?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        width={128}
-        height={128}
-        style={{ objectFit: 'cover' }}
-      />
-      <Styled.PlaceInfoBox>
-        <Typography variant="h6">{place.placeName}</Typography>
-        <Typography>리뷰 수: 23개</Typography>
+  const navigate = useNavigate();
 
-        <Button size="small" variant="outlined" color="primary">
-          <Link
-            to={`/post/create/${place.id}`}
-            state={{
-              placeID: place.id,
-              placeName: place.placeName,
-              addressName: place.addressName,
-            }}
-          >
-            작성하기
-          </Link>
-        </Button>
-      </Styled.PlaceInfoBox>
-    </Styled.Wrapper>
+  const navigateToPostsPage = () => {
+    navigate(`/Post/${place.id}`);
+  };
+  const navigateToCreatePage = () => {
+    navigate(`/Post/Create/${place.id}`, {
+      state: {
+        placeID: place.id,
+        placeName: place.placeName,
+        addressName: place.addressName,
+      },
+    });
+  };
+
+  return (
+    <Styled.OverlayCard>
+      <Styled.OverlayCardContent>
+        <Typography variant="h6">{place.placeName}</Typography>
+        <Typography color="gray.500" variant="subtitle2">
+          {place.addressName}
+        </Typography>
+        <br />
+        <Box className="bottom">
+          <Rating
+            name="half-rating"
+            defaultValue={2.5}
+            precision={0.5}
+            readOnly
+          />
+          <Typography variant="subtitle1">관련 포스트 수: n</Typography>
+        </Box>
+        <Divider sx={{ marginY: '0.5rem' }} />
+
+        <Styled.BtnBox>
+          <Button color="success" onClick={navigateToPostsPage}>
+            포스트 확인
+          </Button>
+          <Button color="info" onClick={navigateToCreatePage}>
+            포스트 작성
+          </Button>
+        </Styled.BtnBox>
+      </Styled.OverlayCardContent>
+    </Styled.OverlayCard>
   );
 };
 

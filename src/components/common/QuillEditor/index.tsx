@@ -1,4 +1,4 @@
-import { useRef, useMemo, memo, Dispatch, SetStateAction } from 'react';
+import { useRef, useMemo, memo, Dispatch } from 'react';
 import { uploadBytes, getDownloadURL, ref } from 'firebase/storage';
 import { Box, styled } from '@mui/material';
 
@@ -65,11 +65,19 @@ const QuillEditor = ({
     });
   };
 
+  /*  const imageDropHandler = (dataUrl, type, imageData) => {
+    QuillImageDropAndPaste.
+    const blob = QuillImageDropAndPaste.dataURLtoBlob(dataUrl);
+    const file = new File([blob], 'image.png', { type: 'image/png' });
+    imageHandler(file);
+  };
+ */
   // quill-editor 모듈
   const modules = useMemo(() => {
     return {
       toolbar: {
         ...quillConfig.modules.toolbar,
+        imageDrop: false,
         handlers: {
           image: imageHandler,
         },

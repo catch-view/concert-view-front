@@ -39,20 +39,7 @@ const HomeView = () => {
   return (
     <ViewContainer>
       <Styled.MapHeader>
-        <Styled.UserPosCard
-          onClick={() => {
-            /* dispatch(
-              setFocusingPlace({
-                ...focusingPlace
-                lat: coordinates?.lat || 0,
-                lng: coordinates?.lng || 0,
-                addressName: address,
-              })
-            ); */
-          }}
-        >
-          접속 위치: {address}
-        </Styled.UserPosCard>
+        <Styled.UserPosCard>접속 위치: {address}</Styled.UserPosCard>
         <IconButton
           size="small"
           sx={{
