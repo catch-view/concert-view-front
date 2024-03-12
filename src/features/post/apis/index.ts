@@ -1,7 +1,6 @@
 import { apiInstance } from 'src/plugins/axios';
 import { SuccessResponse } from 'src/shared/types';
 import { Tag } from '../types';
-import queryString from 'query-string';
 
 interface CreatePostDto {
   placeID: string;
@@ -28,10 +27,10 @@ export const createPost = async (
   return data;
 };
 
-interface GetPostsDto {
+type GetPostsDto = {
   placeID: string;
-  offset: number;
-}
+  page: number;
+};
 /**
  * 게시물 조회 요청 메서드
  * @param GetPostsDto
@@ -43,9 +42,9 @@ export const getPosts = async (placeID: string) => {
   return data;
 };
 
-export const getPostsWithPage = async (placeID: string, page: number) => {
-  const { data } = await apiInstance.get(`post/${placeID}`, {
-    params: { page: page },
+export const getPostsWithPage = async (param: GetPostsDto) => {
+  const { data } = await apiInstance.get(`post/${param.placeID}`, {
+    params: { page: param.page },
   });
 
   return data;
