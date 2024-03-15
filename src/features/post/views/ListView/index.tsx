@@ -2,34 +2,26 @@ import { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // project imports
-import { useInfinitePosts } from '../../hooks/useInfinitePosts';
-import { ViewContainer } from 'src/shared/styles/mui';
 import PostCard from '../../components/Card';
+import LoadingSpinnerBox from 'src/shared/components/Loading/LoadingSpinnerBox';
+import { ViewContainer } from 'src/shared/styles/mui';
+
+import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
 import { Post } from '../../types';
-import useIntersect from 'src/shared/hooks/useIntersect';
 
 const PostView = () => {
   const { pathname } = useLocation();
   const [placeID, setPlaceID] = useState('');
-  const [count, setCount] = useState(0);
-  const [start, setStart] = useState(0);
-  const { isFetchingNextPage, data, hasNextPage, fetchNextPage } =
-    useInfinitePosts(placeID);
+  const { isFetching, isFetchingNextPage, data, hasNextPage, fetchNextPage } =
+    useGetInfinitePosts(placeID);
 
   const posts = useMemo(
-    () => (data ? data.pages.flatMap(({ data }) => data.contents) : []),
+    () => (data ? data.pages.flatMap(({ data }) => data.items) : []),
     [data]
   );
 
-  const ref = useIntersect(async (entry, observer) => {
-    observer.unobserve(entry.target);
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  });
-
   useEffect(() => {
-    const pid = pathname.split('/').at(-1);
+    const pid = pathname.split('/').at(-2);
     if (pid) setPlaceID(pid);
   }, []);
 
@@ -38,10 +30,12 @@ const PostView = () => {
       {/*  <Typography variant="h2">{ }</Typography> */}
 
       {posts?.map((post: Post) => (
-        <div key={Math.random()}>{post?.postID}</div>
+        <PostCard key={post.postID} {...post} />
       ))}
 
-      <div ref={ref}></div>
+      {hasNextPage && (<LoadingSpinnerBox callback={() => {
+        !isFetchingNextPage && fetchNextPage();
+      }} />)}
     </ViewContainer>
   );
 };

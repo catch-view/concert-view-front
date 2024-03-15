@@ -36,8 +36,8 @@ const CreatePostView = () => {
     },
     validationSchema: DisplayingErrorMessagesSchema,
     onSubmit: (values) => {
-      formik.handleSubmit();
-      //handleSubmit();
+      //formik.handleSubmit();
+      handleSubmit();
     },
     enableReinitialize: false,
     validateOnBlur: true,
@@ -63,11 +63,11 @@ const CreatePostView = () => {
       title: formik.values.title,
       images: images,
       html: htmlValue,
-      createdAt: new Date().toLocaleString(),
+      createdAt: new Date(),
     });
     if (result) {
       activateSnack(message || '', 'success');
-      navigate(`/Post/${id}`);
+      navigate(`/Post/${id}/1`);
     } else {
       activateSnack(message || '', 'danger');
     }

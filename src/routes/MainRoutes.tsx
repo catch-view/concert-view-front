@@ -15,7 +15,7 @@ const MainRoutes = {
       element: <MapView />,
     },
     {
-      path: '/Post/:id',
+      path: '/Post/:id/:page',
       element: <PostView />,
     },
     {

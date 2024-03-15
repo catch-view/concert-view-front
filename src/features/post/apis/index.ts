@@ -10,7 +10,7 @@ interface CreatePostDto {
   images: string[];
   title: string;
   html: string;
-  createdAt: string;
+  createdAt: Date;
 }
 /**
  * 게시물 등록 요청 메서드

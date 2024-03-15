@@ -5,7 +5,7 @@ export const MapHeader = styled(Box)({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  backgroundColor: 'rgba(247,217,196,0.7)',
+  backgroundColor: '#b5b682',
   padding: '0.1rem 0.5rem',
 });
 

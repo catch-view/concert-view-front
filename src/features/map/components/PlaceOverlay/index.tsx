@@ -8,7 +8,7 @@ const PlaceOverlay = (place: Place) => {
   const navigate = useNavigate();
 
   const navigateToPostsPage = () => {
-    navigate(`/Post/${place.id}`);
+    navigate(`/Post/${place.id}/1`);
   };
   const navigateToCreatePage = () => {
     navigate(`/Post/Create/${place.id}`, {

@@ -1,26 +1,25 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { apiInstance } from 'src/plugins/axios';
-import queryString from 'query-string';
 
-type getInfinitePostsParam = {
+type GetInfinitePostsParam = {
   placeID: string;
   pageParam: number;
 };
 
-export const useInfinitePosts = (placeID: string) => {
-  const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+export const useGetInfinitePosts = (placeID: string = '1602317080') => {
+  const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ['posts', placeID],
-      queryFn: async ({ pageParam = 0 }) => {
-        return await apiInstance.get('post', {
-          params: { placeID: placeID, page: pageParam },
-        });
+      queryFn: async ({ pageParam = 1 }) => {
+        return await apiInstance.get(`post/${placeID}/${pageParam}`);
       },
-      initialPageParam: 0,
-      getNextPageParam: ({ data: { isLastPage, pageNumber } }) =>
-        isLastPage ? undefined : pageNumber + 1,
+      initialPageParam: 1,
+      getNextPageParam: ({ data: { isLastPage, currentPage } }, pages) => {
+        console.log(pages)
+        return isLastPage ? undefined : currentPage + 1
+      },
       enabled: !!placeID,
     });
 
-  return { data, isFetchingNextPage, fetchNextPage, hasNextPage };
+  return { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage };
 };
