@@ -31,7 +31,7 @@ const Main = styled('main', {
   ),
   [theme.breakpoints.up('md')]: {
     marginLeft: 0,
-    marginTop: 80,
+    marginTop: 70,
     width: '100%',
   },
   [theme.breakpoints.down('md')]: {

@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import { Avatar, CardContent, CardMedia, Typography } from '@mui/material';
+import { Avatar, CardContent, CardMedia, Typography, Rating, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 // project imports
@@ -22,8 +22,9 @@ const PostCard = (post: Type.Post) => {
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
+    // 첫번째 이미지가 로드되기 전까지 skelton 표시
     const image = new Image();
-    image.src = post.images[0];
+    image.src = post.images[0].src;
     image.onload = () => {
       setImageLoaded(true);
     };
@@ -32,13 +33,6 @@ const PostCard = (post: Type.Post) => {
   return (
     <Styled.PostCard
       variant="outlined"
-      onClick={() => {
-        navigate(`/post/detail/${post.postID}`, {
-          state: {
-            post: post,
-          },
-        });
-      }}
     >
       <Swiper
         // install Swiper modules
@@ -49,20 +43,33 @@ const PostCard = (post: Type.Post) => {
         scrollbar={{ draggable: true }}
         onSlideChange={() => console.log('slide change')}
       >
-        {post.images.map((img: string) => (
-          <SwiperSlide key={img}>
+        {post.images.map((img) => (
+          <SwiperSlide key={img.src}>
             {imageLoaded ? (
+              <Box sx={{
+                position:'relative'
+              }}>
               <CardMedia
                 component="img"
-                image={img}
+                image={img.src}
                 alt="postimg"
                 sx={{
+                  position: 'relative',
                   height: '260px',
                   objectFit: 'contain',
                   borderRadius: '16px',
                   padding: '1%',
                 }}
-              />
+                />
+                <Styled.ImageRateInfoBox>
+                  <Rating value={img.rate} precision={0.5} readOnly color='red' sx={{
+                    '& .MuiRating-iconFilled': {
+                      color: '#fbfd94',
+                    },
+                  }} />
+                  <Typography variant='caption' color='white'>{img.rateCount}명의 평가</Typography>
+                </Styled.ImageRateInfoBox>   
+              </Box>
             ) : (
               <CardMediaSkeleton />
             )}

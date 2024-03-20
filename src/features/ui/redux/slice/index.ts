@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SetSnackInfoPayload } from '../../types';
+import { UiSliceState, SetSnackInfoPayload } from '../../types';
+
+const initialState: UiSliceState = {
+  showAppSidebar: false,
+  showSnackAlert: false,
+  snackAlertMessage: '',
+  snackAlertType: 'success',
+}
 
 const uisSlice = createSlice({
   name: 'uis',
-  initialState: {
-    showAppSidebar: false,
-    showSnackAlert: false,
-    snackAlertMessage: '',
-    snackAlertType: 'success',
-  },
+  initialState: initialState,
 
   reducers: {
     toggleShowAppSidebar: (state, action: PayloadAction<boolean>) => {

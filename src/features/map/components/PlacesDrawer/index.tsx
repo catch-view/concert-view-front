@@ -11,9 +11,10 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 // project imports
-import { useAppSelector } from 'src/store/hook';
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import { setDrawerPlaces, setDrawerSearchQuery } from '../../redux/slice';
 import PlacesList from './PlacesList';
-import { IKakaoPlace } from './PlacesList/interface';
+import { IKakaoPlace } from '../../types';
 import * as Styled from './styled';
 import { DisplayingErrorMessagesSchema } from './schemas';
 
@@ -22,9 +23,9 @@ interface IPlacesDrawer {
   toggleOpenDrawer: () => void;
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
-  const { userPosition } = useAppSelector((state) => state.map);
+  const dispatch = useAppDispatch();
+  const { userPosition, drawerSearchQuery, drawerPlaces } = useAppSelector((state) => state.map);
   const ps = new kakao.maps.services.Places();
-  const [places, setPlaces] = useState<IKakaoPlace[]>([]);
   const [pageData, setPageData] = useState<{
     curPage: number;
     totalPages: null | number;
@@ -47,13 +48,25 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
     validateOnBlur: true,
   });
 
+
+  useEffect(() => {
+    if (drawerSearchQuery) {
+      formik.values.searchQuery = drawerSearchQuery;
+      searchPlaces();
+    }
+  }, []);
+
+  /**
+   * 페이지 클릭 처리 메소드
+   * @param page 이동할 페이지 번호
+   */
   const handlePageClick = (page: number) => {
     ps.keywordSearch(
       userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
           const placesData = data as IKakaoPlace[];
-          setPlaces(placesData);
+          dispatch(setDrawerPlaces(placesData));
         }
       },
       {
@@ -71,7 +84,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
           const placesData = data as IKakaoPlace[];
-          setPlaces(placesData);
+          dispatch(setDrawerPlaces(placesData));
           setPageData({ ...pageData, totalPages: _pagination.last });
         }
       }
@@ -106,7 +119,10 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
         value={formik.values.searchQuery}
         onChange={formik.handleChange}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') searchPlaces();
+          if (e.key === 'Enter') {
+            dispatch(setDrawerSearchQuery(formik.values.searchQuery));
+            searchPlaces();
+          }
         }}
         error={
           Boolean(formik.values.searchQuery.length) &&
@@ -116,7 +132,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
           Boolean(formik.values.searchQuery.length) && formik.errors.searchQuery
         }
       />
-      <PlacesList places={places} />
+      <PlacesList places={drawerPlaces} />
 
       {/* footer */}
       {pageData.totalPages && (

@@ -1,19 +1,24 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useMemo, Suspense, lazy } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Grid, Box } from '@mui/material';
+import { mirage } from 'ldrs'
 
 // project imports
-import PostCard from '../../components/Card';
+import ListHeader from '../../components/ListHeader';
 import LoadingSpinnerBox from 'src/shared/components/Loading/LoadingSpinnerBox';
 import { ViewContainer } from 'src/shared/styles/mui';
 
 import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
 import { Post } from '../../types';
 
+const LazyPostCard = lazy(() => import('../../components/Card'))
+mirage.register();
+
 const PostView = () => {
-  const { pathname } = useLocation();
-  const [placeID, setPlaceID] = useState('');
-  const { isFetching, isFetchingNextPage, data, hasNextPage, fetchNextPage } =
-    useGetInfinitePosts(placeID);
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { isFetchingNextPage, data, hasNextPage, fetchNextPage } =
+    useGetInfinitePosts(state?.placeID ?? '');
 
   const posts = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.items) : []),
@@ -21,17 +26,31 @@ const PostView = () => {
   );
 
   useEffect(() => {
-    const pid = pathname.split('/').at(-2);
-    if (pid) setPlaceID(pid);
+    if (!state) navigate('/')
   }, []);
 
   return (
     <ViewContainer>
-      {/*  <Typography variant="h2">{ }</Typography> */}
-
-      {posts?.map((post: Post) => (
-        <PostCard key={post.postID} {...post} />
-      ))}
+      <ListHeader placeID={state?.placeID ?? ''} placeName={state?.placeName ?? ''} addressName={state?.addressName ?? ''} />
+      
+      <Suspense fallback={
+        <Box sx={{
+          margin: '5rem'
+        }}>
+          <l-mirage
+            size="100"
+            speed="1.75" 
+            color="black" 
+        ></l-mirage>
+        </Box>  
+      }>
+        <Grid container justifyContent={'center'} spacing={2}>
+            {posts?.map((post: Post) => (
+            <LazyPostCard key={post.postID} {...post} />
+          ))}
+        </Grid>
+        
+      </Suspense>
 
       {hasNextPage && (<LoadingSpinnerBox callback={() => {
         !isFetchingNextPage && fetchNextPage();

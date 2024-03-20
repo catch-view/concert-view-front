@@ -4,6 +4,7 @@ import { Box, styled } from '@mui/material';
 
 // project imports
 import { storage } from 'src/firebase';
+import { PostImage } from 'src/features/post/types';
 
 // react-quill
 import ReactQuill, { Quill } from 'react-quill';
@@ -21,8 +22,8 @@ const EditorWrapper = styled(Box)({
 
 interface QuillEditorProps {
   htmlValue: string;
-  images: string[];
-  setImages: Dispatch<React.SetStateAction<string[]>>;
+  images?: PostImage[];
+  setImages: Dispatch<React.SetStateAction<PostImage[]>>;
   onChange: (content: string) => void;
 }
 const QuillEditor = ({
@@ -52,7 +53,11 @@ const QuillEditor = ({
         // Firebase Method : uploadBytes, getDownloadURL
         await uploadBytes(storageRef, file).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            setImages((current) => [...current, url]);
+            setImages((current) => [...current, { 
+              src: url,
+              rate: 0.0,
+              rateCount: 0,
+            }]);
             // 이미지 URL 에디터에 삽입
             editor.insertEmbed(range.index, 'image', url);
             // URL 삽입 후 커서를 이미지 뒷 칸으로 이동

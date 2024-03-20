@@ -17,7 +17,7 @@ import QuillEditor from 'src/shared/components/QuillEditor';
 import useSnackAlert from 'src/shared/hooks/useSnackAlert';
 import { useCreatePostMutation } from '../../hooks/useCreatePostMutation';
 import * as Styled from './styled';
-import { Tag } from '../../types';
+import { PostImage, Tag } from '../../types';
 
 const CreatePostView = () => {
   const { activateSnack } = useSnackAlert();
@@ -44,7 +44,7 @@ const CreatePostView = () => {
   });
 
   const [tags, setTags] = useState<Tag[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<PostImage[]>([]);
   const [htmlValue, setHtmlValue] = useState<string>('');
 
   const handleEditorValuechange = useCallback((value: string) => {

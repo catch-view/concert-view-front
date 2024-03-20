@@ -2,11 +2,7 @@ import {
   styled,
   Drawer,
   Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
+  Box,
   IconButton,
   Theme,
   CSSObject,
@@ -18,11 +14,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 // project imports
 import MenuList from './MenuList';
 import { ISidebarProps } from './interface';
-
-const drawerWidth = 240;
+import { DRAWER_WIDTH } from 'src/features/ui/constants';
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
+  width: DRAWER_WIDTH,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -45,7 +40,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const MuiDrawer = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  width: drawerWidth,
+  width: DRAWER_WIDTH,
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
@@ -59,7 +54,7 @@ const MuiDrawer = styled(Drawer, {
   }),
 }));
 
-const SidebarHeader = styled('div')(({ theme }) => ({
+const SidebarHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',

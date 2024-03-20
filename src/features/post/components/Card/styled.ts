@@ -1,8 +1,8 @@
-import { Box, Card, CardMedia, styled } from '@mui/material';
+import { Box, Card, styled } from '@mui/material';
 
 export const PostCard = styled(Card)({
   display: 'flex',
-  maxWidth: '820px',
+  width: '820px',
   backgroundColor: 'white',
   padding: '14px',
   margin: '0.5rem 0',
@@ -37,3 +37,15 @@ export const AuthorInfo = styled(Box)({
   borderRadius: '16px',
   marginTop: '2px',
 });
+
+export const ImageRateInfoBox = styled(Box)({
+  display: 'flex',
+  height: '28px',
+  alignItems:'center',
+  position: 'fixed',
+  bottom: '30px',
+  right: '50px',
+  borderRadius: '0.3rem',
+  padding: '0 0.2rem 0.1rem 0.2rem',
+  backgroundColor: 'rgba(0,0,0,0.6)'
+})

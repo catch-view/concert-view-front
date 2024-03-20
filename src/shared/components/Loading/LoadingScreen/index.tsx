@@ -3,7 +3,7 @@ import { Backdrop, CircularProgress } from '@mui/material';
 interface Props {
   open: boolean;
 }
-const LoadingDialog = ({ open }: Props) => {
+const LoadingScreen = ({ open }: Props) => {
   return (
     <Backdrop
       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -14,4 +14,4 @@ const LoadingDialog = ({ open }: Props) => {
   );
 };
 
-export default LoadingDialog;
+export default LoadingScreen;

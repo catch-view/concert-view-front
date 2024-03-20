@@ -33,7 +33,7 @@ const KakaoMap = () => {
       style={{
         // 지도의 크기
         width: '100%',
-        height: '100%',
+        height: '100vh',
       }}
     >
       {/* 접속자 위치 마커 */}

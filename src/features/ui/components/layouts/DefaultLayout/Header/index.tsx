@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
@@ -11,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 // project imports
 import { IHeaderProps } from './interface';
+import { DRAWER_WIDTH } from 'src/features/ui/constants';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -24,8 +24,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: 240,
-    width: `calc(100% - ${240}px)`,
+    marginLeft: DRAWER_WIDTH,
+    width: `calc(100% - ${DRAWER_WIDTH}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,

@@ -15,7 +15,7 @@ const LoadingSpinner = ({...observerProps}: UseIntersectionObserverProps) => {
         alignItems: 'center',
       }}
     >
-      <CircularProgress color='info' size={100} />
+      <CircularProgress color='success' size={100} />
     </Box>
   );
 };

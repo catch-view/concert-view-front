@@ -20,6 +20,7 @@ const initialState: Type.MapSliceState = {
     lat: null,
     lng: null,
   },
+  drawerSearchQuery: '',
   drawerPlaces: [],
 };
 const mapSlice = createSlice({
@@ -36,13 +37,17 @@ const mapSlice = createSlice({
       state.focusingPlace = action.payload;
     },
 
-    setDrawerPlaces: (state, action: PayloadAction<Type.Place[]>) => {
+    setDrawerSearchQuery: (state, action: PayloadAction<string>) => {
+      state.drawerSearchQuery = action.payload;
+    },
+
+    setDrawerPlaces: (state, action: PayloadAction<Type.IKakaoPlace[]>) => {
       state.drawerPlaces = action.payload;
     },
   },
 });
 
-export const { setUserPosition, setFocusingPlace, setDrawerPlaces } =
+export const { setUserPosition, setFocusingPlace, setDrawerPlaces, setDrawerSearchQuery } =
   mapSlice.actions;
 
 export default mapSlice.reducer;

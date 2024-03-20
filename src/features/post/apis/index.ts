@@ -1,13 +1,13 @@
 import { apiInstance } from 'src/plugins/axios';
 import { SuccessResponse } from 'src/shared/types';
-import { Tag } from '../types';
+import { PostImage, Tag } from '../types';
 
 interface CreatePostDto {
   placeID: string;
   author: string;
   password: string;
   tags?: Tag[];
-  images: string[];
+  images: PostImage[];
   title: string;
   html: string;
   createdAt: Date;

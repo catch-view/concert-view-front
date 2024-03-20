@@ -60,6 +60,7 @@ const SnackAlert = () => {
       message={snackAlertMessage}
       action={action}
       sx={getSnackStyle(snackAlertType)}
+      autoHideDuration={7000}
     />
   );
 };

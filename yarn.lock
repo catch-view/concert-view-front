@@ -6420,6 +6420,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.32.2"
     firebase: "npm:^10.8.1"
     formik: "npm:^2.4.5"
+    ldrs: "npm:^1.0.1"
     quill-image-drop-and-paste: "npm:^1.3.0"
     quill-image-resize-module-ts: "npm:^3.0.3"
     randomcolor: "npm:^0.6.2"
@@ -10779,6 +10780,13 @@ __metadata:
     picocolors: "npm:^1.0.0"
     shell-quote: "npm:^1.8.1"
   checksum: 10c0/82d0bd9a44e7a972157719e63dac1b8196db6ec7066c1ec57a495f6c3d6e734f3c4da89549e7b33eb3b0356668ad02a9e7782b6733f5ebd7a61b7c5f635a3ee9
+  languageName: node
+  linkType: hard
+
+"ldrs@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "ldrs@npm:1.0.1"
+  checksum: 10c0/10210e78b293a45f657aad56e2e32cb05224e633fe1b4e554188c7213452b257ca9ead536792196c145d30e0b9a93cbb56cbb0a346455423c31155713b840fd2
   languageName: node
   linkType: hard
 

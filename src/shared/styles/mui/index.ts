@@ -1,13 +1,13 @@
 import { Box, styled } from '@mui/material';
+import { DRAWER_WIDTH } from 'src/features/ui/constants';
 
 export const ViewContainer = styled(Box)({
-  width: '100%',
-  height: '100vh',
+  width: `calc(100%-${DRAWER_WIDTH}px)`,
+  minHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  margin: '15px',
-  borderRadius: '1rem',
+  margin: '8px',
   border: '1px solid rgba(0,0,0,0.2)',
   overflow: 'hidden',
 });
