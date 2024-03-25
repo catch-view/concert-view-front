@@ -17,7 +17,7 @@ import QuillEditor from 'src/shared/components/QuillEditor';
 import useSnackAlert from 'src/shared/hooks/useSnackAlert';
 import { useCreatePostMutation } from '../../hooks/useCreatePostMutation';
 import * as Styled from './styled';
-import { PostImage, Tag } from '../../types';
+import { Tag } from '../../types';
 
 const CreatePostView = () => {
   const { activateSnack } = useSnackAlert();
@@ -44,7 +44,7 @@ const CreatePostView = () => {
   });
 
   const [tags, setTags] = useState<Tag[]>([]);
-  const [images, setImages] = useState<PostImage[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [htmlValue, setHtmlValue] = useState<string>('');
 
   const handleEditorValuechange = useCallback((value: string) => {
@@ -67,7 +67,13 @@ const CreatePostView = () => {
     });
     if (result) {
       activateSnack(message || '', 'success');
-      navigate(`/Post/${id}/1`);
+      navigate(`/Post/${id}/1`, {
+        state: {
+          placeID: state.placeID,
+          placeName: state.placeName,
+          addressName: state.addressName
+        }
+      });
     } else {
       activateSnack(message || '', 'danger');
     }

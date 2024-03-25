@@ -41,7 +41,7 @@ const MenuList = ({ showAppSidebar }: MenuList) => {
             <MapIcon />
           </ListItemIcon>
           <ListItemText
-            primary={'map'}
+            primary={'지도홈'}
             sx={{ opacity: showAppSidebar ? 1 : 0 }}
           />
         </ListItemButton>

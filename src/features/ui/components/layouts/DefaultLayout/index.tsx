@@ -49,7 +49,7 @@ const Main = styled('main', {
 
 const DefaultLayout = () => {
   const theme = useTheme();
-  const { showAppSidebar } = useAppSelector((state) => state.uis);
+  const { showAppSidebar } = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
 
   const toggleShowAppSidebar = () => {

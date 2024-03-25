@@ -1,34 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UiSliceState, SetSnackInfoPayload } from '../../types';
+import { createSlice } from '@reduxjs/toolkit';
+import { layoutState, layoutSlice } from './layout';
+import { modalState, modalSlice } from './modal';
+import { snackAlertState, snackAlertSlice } from './snackAlert';
 
-const initialState: UiSliceState = {
-  showAppSidebar: false,
-  showSnackAlert: false,
-  snackAlertMessage: '',
-  snackAlertType: 'success',
-}
-
-const uisSlice = createSlice({
-  name: 'uis',
-  initialState: initialState,
+const uiSlice = createSlice({
+  name: 'ui',
+  initialState: {
+    ...layoutState,
+    ...snackAlertState,
+    ...modalState
+  },
 
   reducers: {
-    toggleShowAppSidebar: (state, action: PayloadAction<boolean>) => {
-      state.showAppSidebar = action.payload;
-    },
-    setShowSnackAlert: (state, action: PayloadAction<boolean>) => {
-      state.showSnackAlert = action.payload;
-    },
-
-    setSnackAlertInfo: (state, action: PayloadAction<SetSnackInfoPayload>) => {
-      const { message, type } = action.payload;
-      state.snackAlertMessage = message;
-      state.snackAlertType = type;
-    },
+    ...layoutSlice,
+    ...snackAlertSlice,
+    ...modalSlice
   },
 });
 
-export const { toggleShowAppSidebar, setShowSnackAlert, setSnackAlertInfo } =
-  uisSlice.actions;
+export const { toggleShowAppSidebar, setSnackInfo, setModalType, toggleShowModal } =
+  uiSlice.actions;
 
-export default uisSlice.reducer;
+export default uiSlice.reducer;

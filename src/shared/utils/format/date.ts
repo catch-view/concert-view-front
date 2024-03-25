@@ -1,6 +1,7 @@
 export const formatKoreanTextCompareDatesFromNow = (
   compareISODateString: string
 ): string => {
+  if (!compareISODateString) return '';
   const now = new Date();
   const past = new Date(compareISODateString);
   const diff = now.getTime() - past.getTime();

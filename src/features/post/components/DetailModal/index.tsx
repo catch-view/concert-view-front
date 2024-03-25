@@ -1,117 +1,151 @@
-import { useState, useEffect } from 'react';
-import { DialogProps } from '@mui/material/Dialog';
-import Divider from "@mui/material/Divider";
-import CircularProgress from '@mui/material/CircularProgress';
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from '@mui/icons-material/Close';
-import SendIcon from '@mui/icons-material/Send';
-import MessageIcon from '@mui/icons-material/Message';
-import { useAppDispatch, useAppSelector } from "src/store/hook";
-import Box from "@mui/material/Box";
-import * as Styled from "./styles";
-import useSnackAlert from 'src/shared/hooks/useSnackAlert';
+import { useMemo } from 'react';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  CardMedia,
+  IconButton,
+  Rating,
+  Typography,
+  Avatar,
+  Divider,
+} from '@mui/material';
+import CloseOutlined from '@mui/icons-material/CloseOutlined';
 
-interface Props {
-    open: boolean;
-}
-const PostDialog = ({ open }: Props) => {
-    const { post } = useAppSelector((state) => state.post);
-    const { activateSnack } = useSnackAlert();
-    const [maxWidth, setMaxWidth] = useState<DialogProps['maxWidth']>('lg');
+// import Swiper
+import { Pagination, EffectFade, EffectCards } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
 
-    const [inputText, setInputText] = useState("");
-    const dispatch = useAppDispatch();
+// project imports
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import { toggleShowModal } from 'src/features/ui/redux/slice';
+import { formatKoreanTextCompareDatesFromNow } from 'src/shared/utils/format/date';
+import { ImageRate } from '../../types';
+import * as Styled from './styled';
 
-    const handleClose = () => {
-        dispatch(setCommentsLoading(true));
-        dispatch(setOpenPostDialog(false));
-    }
+type Props = {
+  showModal: boolean;
+};
+const PostDetailModal = ({ showModal }: Props) => {
+  const { ip } = useAppSelector((state) => state.user);
+  const { modalPost } = useAppSelector((state) => state.post);
+  const dispatch = useAppDispatch();
 
-    const handleSubmit = () => {
-        const date = new Date();
+  const toggleModal = () => {
+    dispatch(toggleShowModal());
+  };
 
-        (postDialog_postId && userId) && createComment({
-            comment_text: inputText,
-            comment_date: date.toLocaleDateString() + date.toLocaleTimeString(),
-            comment_post: postDialog_postId,
-            comment_user: userId
-        }).then(res => {
-            activateSnack("댓글이 등록되었습니다", "success");
-            dispatch(setComments(res.data));
-            setInputText("");
-        }).catch((err) => {
-            console.log(err);
-            activateSnack("오류로 인해 댓글 등록에 실패했습니다", "danger");
-        })
-    }
+  /**
+   * 이미지 평가 여부 확인
+   */
+  const checkIsRated = (rates: ImageRate[]) => {
+    const idx = rates.findIndex((rate: ImageRate) => rate.clientIP === ip);
+    if (idx == -1) return false;
+    else return true;
+  };
 
-    useEffect(() => {
-        postDialog_postId && dispatch(get_comments(postDialog_postId));
-    }, []);
+  return (
+    <Dialog
+      maxWidth='xl'
+      open={showModal}
+      onClose={toggleModal}
+      sx={{
+        '& .MuiDialog-paper': {
+          backgroundColor: 'white',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          padding: '0.2rem',
+        }}
+      >
+        <IconButton onClick={toggleModal}>
+          <CloseOutlined />
+        </IconButton>
+      </Box>
+      <DialogContent
+        sx={{
+          paddingY: { md: '1.5rem', lg: '3rem' },
+          paddingX: { md: '3rem', lg: '10rem' },
+          overflowX: 'hidden',
+        }}
+      >
+        <Styled.ModalHeader>
+          <Styled.HeaderPlaceInfoBox>
+            <Typography variant='h4' fontWeight='bold'>
+              {modalPost?.title}
+            </Typography>{' '}
+            <br />
+            <Typography variant='h5' color='grey.600'>
+              🏛️{modalPost?.placeName}
+            </Typography>
+            <Typography variant='h6' color='grey.500'>
+              📮{modalPost?.addressName}
+            </Typography>
+          </Styled.HeaderPlaceInfoBox>
+          <Styled.HeaderAuthorInfoBox>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar sx={{ marginRight: '0.3rem' }} />
+              <Typography variant='h6' color='black'>
+                {modalPost?.author}
+              </Typography>
+            </Box>
+            <Typography variant='caption'>
+              {formatKoreanTextCompareDatesFromNow(modalPost?.createdAt ?? '')}{' '}
+              작성
+            </Typography>
+          </Styled.HeaderAuthorInfoBox>
+        </Styled.ModalHeader>
 
-    return (
-        <Styled.PostDialog
-            open={open}
-            fullWidth={true}
-            maxWidth={maxWidth}
-            onClose={handleClose}
-            scroll='paper'
+        <Swiper
+          // install Swiper modules
+          modules={[Pagination, EffectFade, EffectCards]}
+          pagination={{ clickable: true }}
+          grabCursor={true}
+          effect='cards'
         >
-            <Styled.PostDialogTitle>
-                <CloseIcon className="closeIcon" onClick={handleClose} />
-            </Styled.PostDialogTitle>
+          {modalPost?.images.map((img) => (
+            <Styled.ImageSlideBox key={img.src}>
+              <SwiperSlide
+                key={img.src}
+                style={{
+                  borderRadius: '1rem',
+                }}
+              >
+                <CardMedia
+                  component='img'
+                  image={img.src}
+                  alt='postimg'
+                  sx={{
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    borderRadius: '1rem 1rem 0 0',
+                    height: { md: '480px', lg: '680px' },
+                    objectFit: 'contain',
+                  }}
+                />
+                <Styled.ImageRateBox>
+                  <Typography variant='caption'>
+                    이 이미지에 대한 평점 /
+                  </Typography>
+                  <Rating />
+                </Styled.ImageRateBox>
+              </SwiperSlide>
+            </Styled.ImageSlideBox>
+          ))}
+        </Swiper>
 
-            <Styled.PostDialogContent>
-                {postDialog_image && (
-                    <Styled.ImageBox>
-                        <img src={postDialog_image} alt="postImage" loading='lazy' />
-                    </Styled.ImageBox>
-                )}
+        <Styled.EditorContentBox
+          sx={{ boxShadow: 1 }}
+          dangerouslySetInnerHTML={{ __html: modalPost?.html ?? '' }}
+        ></Styled.EditorContentBox>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-                <Styled.TextBox>
-                    <p>{postDialog_text}</p>
-                </Styled.TextBox>
-
-                <Styled.CommentsBox>
-                    <Box className="inputField">
-                        <Avatar className="userAvatar" src={userAvatar} />
-                        <Styled.CommentInput
-                            placeholder={userNickname.concat(" 님의 댓글을 남겨보세요 😀")}
-                            onChange={(e) => { setInputText(e.target.value); }}
-                            value={inputText}
-                            size="medium"
-                        />
-
-                        <IconButton
-                            className="submitBtn"
-                            size='large'
-                            onClick={handleSubmit}
-                        >
-                            <SendIcon />
-                        </IconButton>
-                    </Box>
-
-                    <Divider textAlign="left" className="divider">{comments.length}개의 댓글</Divider>
-
-                    <Box className="comments">
-                        {commentsLoading ? (
-                            <Styled.LoadingBox>
-                                <CircularProgress size={150} />
-                            </Styled.LoadingBox>
-                        ) :
-                            comments.length > 0 ? comments.map(comment => (
-                                <Comment key={comment.comment_id} {...comment} />
-                            )) : (
-                                <div className="noComments">
-                                    <MessageIcon />
-                                    <label>댓글을 남겨보세요</label>
-                                </div>)}
-                    </Box>
-                </Styled.CommentsBox>
-            </Styled.PostDialogContent>
-        </Styled.PostDialog>
-    )
-}
-
-export default PostDialog;
+export default PostDetailModal;

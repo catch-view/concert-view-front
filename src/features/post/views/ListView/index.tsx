@@ -1,7 +1,7 @@
 import { useEffect, useMemo, Suspense, lazy } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
-import { mirage } from 'ldrs'
+import { mirage } from 'ldrs';
 
 // project imports
 import ListHeader from '../../components/ListHeader';
@@ -11,7 +11,7 @@ import { ViewContainer } from 'src/shared/styles/mui';
 import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
 import { Post } from '../../types';
 
-const LazyPostCard = lazy(() => import('../../components/Card'))
+const LazyPostCard = lazy(() => import('../../components/Card'));
 mirage.register();
 
 const PostView = () => {
@@ -26,35 +26,49 @@ const PostView = () => {
   );
 
   useEffect(() => {
-    if (!state) navigate('/')
+    if (!state) navigate('/');
   }, []);
 
   return (
     <ViewContainer>
-      <ListHeader placeID={state?.placeID ?? ''} placeName={state?.placeName ?? ''} addressName={state?.addressName ?? ''} />
-      
-      <Suspense fallback={
-        <Box sx={{
-          margin: '5rem'
-        }}>
-          <l-mirage
-            size="100"
-            speed="1.75" 
-            color="black" 
-        ></l-mirage>
-        </Box>  
-      }>
+      <ListHeader
+        placeID={state?.placeID ?? ''}
+        placeName={state?.placeName ?? ''}
+        addressName={state?.addressName ?? ''}
+      />
+
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              margin: '5rem',
+            }}
+          >
+            <l-mirage size='100' speed='1.75' color='black'></l-mirage>
+          </Box>
+        }
+      >
         <Grid container justifyContent={'center'} spacing={2}>
-            {posts?.map((post: Post) => (
-            <LazyPostCard key={post.postID} {...post} />
+          {posts?.map((post: Post) => (
+            <LazyPostCard
+              key={post.postID}
+              {...{
+                ...post,
+                placeName: state?.placeName ?? '',
+                addressName: state?.addressName ?? '',
+              }}
+            />
           ))}
         </Grid>
-        
       </Suspense>
 
-      {hasNextPage && (<LoadingSpinnerBox callback={() => {
-        !isFetchingNextPage && fetchNextPage();
-      }} />)}
+      {hasNextPage && (
+        <LoadingSpinnerBox
+          callback={() => {
+            !isFetchingNextPage && fetchNextPage();
+          }}
+        />
+      )}
     </ViewContainer>
   );
 };

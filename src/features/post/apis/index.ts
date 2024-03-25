@@ -7,7 +7,7 @@ interface CreatePostDto {
   author: string;
   password: string;
   tags?: Tag[];
-  images: PostImage[];
+  images: string[];
   title: string;
   html: string;
   createdAt: Date;

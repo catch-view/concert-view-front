@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import {
-  setShowSnackAlert,
-  setSnackAlertInfo,
+  setSnackInfo
 } from 'src/features/ui/redux/slice';
 import { useAppDispatch } from 'src/store/hook';
 
@@ -17,12 +16,12 @@ const useSnackAlert = () => {
     type: 'success' | 'danger' | 'info'
   ) => {
     dispatch(
-      setSnackAlertInfo({
-        message: message,
-        type: type,
+      setSnackInfo({
+        showSnackAlert: true,
+        snackAlertMessage: message,
+        snackAlertType: type
       })
     );
-    dispatch(setShowSnackAlert(true));
   };
 
   return { activateSnack: useCallback(activateSnack, []) };

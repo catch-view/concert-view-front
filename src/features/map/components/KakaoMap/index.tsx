@@ -24,7 +24,7 @@ const KakaoMap = () => {
 
   return (
     <Map
-      id="map"
+      id='map'
       center={{
         lat: focusingPlace.lat ?? 0,
         lng: focusingPlace.lng ?? 0,
@@ -35,6 +35,7 @@ const KakaoMap = () => {
         width: '100%',
         height: '100vh',
       }}
+      level={4}
     >
       {/* 접속자 위치 마커 */}
       <UserMarker

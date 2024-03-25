@@ -1,6 +1,6 @@
 export type PostSliceState = {
-  modalPost: Post | null;
-}
+  modalPost: ModalPost | null;
+};
 
 export type Post = {
   postID: string;
@@ -13,6 +13,12 @@ export type Post = {
   tags: Tag[];
 };
 
+export type ModalPost = Post & {
+  placeID: string;
+  placeName: string;
+  addressName: string;
+};
+
 export type Tag = {
   label: string;
   bgColor?: string;
@@ -20,7 +26,11 @@ export type Tag = {
 };
 
 export type PostImage = {
-  src: string; 
+  src: string;
+  rates: ImageRate[];
+};
+
+export type ImageRate = {
+  clientIP: string;
   rate: number;
-  rateCount: number;
-}
+};

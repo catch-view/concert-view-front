@@ -1,15 +1,15 @@
 import { Snackbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'src/store/hook';
-import { setShowSnackAlert } from 'src/features/ui/redux/slice';
+import { setSnackInfo } from 'src/features/ui/redux/slice';
 
 //icons
 import CloseIcon from '@mui/icons-material/Close';
 
 const SnackAlert = () => {
   const dispatch = useAppDispatch();
-  const { snackAlertMessage, snackAlertType, showSnackAlert } = useAppSelector(
-    (state) => state.uis
+  const { snackInfo } = useAppSelector(
+    (state) => state.ui
   );
   const getSnackStyle = (type: string) => {
     if (type === 'success') {
@@ -40,11 +40,8 @@ const SnackAlert = () => {
     event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    dispatch(setShowSnackAlert(false));
+    if (reason === 'clickaway') return;
+    dispatch(setSnackInfo({ showSnackAlert: false, snackAlertMessage: '', snackAlertType: 'info'}));
   };
 
   const action = (
@@ -54,12 +51,12 @@ const SnackAlert = () => {
   );
   return (
     <Snackbar
-      open={showSnackAlert}
+      open={snackInfo.showSnackAlert}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       onClose={handleClose}
-      message={snackAlertMessage}
+      message={snackInfo.snackAlertMessage}
       action={action}
-      sx={getSnackStyle(snackAlertType)}
+      sx={getSnackStyle(snackInfo.snackAlertType)}
       autoHideDuration={7000}
     />
   );
