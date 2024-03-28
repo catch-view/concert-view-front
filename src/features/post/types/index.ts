@@ -34,3 +34,20 @@ export type ImageRate = {
   clientIP: string;
   rate: number;
 };
+
+export type NewPostContent = {
+  image: string;
+  rates: ImageRate[];
+  tags: Tag[];
+  description: string;
+};
+
+export type NewPost = {
+  postID: string;
+  placeID: string;
+  title: string;
+  author: string;
+  password: string;
+  contents: NewPostContent[];
+  createdAt: string;
+};

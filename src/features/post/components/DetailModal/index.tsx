@@ -8,7 +8,6 @@ import {
   Rating,
   Typography,
   Avatar,
-  Divider,
 } from '@mui/material';
 import CloseOutlined from '@mui/icons-material/CloseOutlined';
 

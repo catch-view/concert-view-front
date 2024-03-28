@@ -29,9 +29,9 @@ const Main = styled('main', {
           duration: theme.transitions.duration.leavingScreen,
         }
   ),
+  marginTop: 70,
   [theme.breakpoints.up('md')]: {
     marginLeft: 0,
-    marginTop: 70,
     width: '100%',
   },
   [theme.breakpoints.down('md')]: {

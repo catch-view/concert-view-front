@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material';
+import { Box, Input, styled } from '@mui/material';
 
 export const TopTextBox = styled(Box)({
   display: 'flex',
@@ -7,26 +7,40 @@ export const TopTextBox = styled(Box)({
 });
 
 export const TextFieldsBox = styled(Box)({
-  width: '600px',
   display: 'flex',
   flexDirection: 'column',
-  gap: '10px',
+  alignItems: 'flex-start',
   marginTop: '1rem',
+  width: '50%',
+
+  '& .MuiTextField-root': {
+    width: '100%',
+  },
 });
 
-export const TagsBox = styled(Box)({
+export const TagsBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  borderRadius: '0.5rem',
-  width: '30%',
-  margin: '0.5rem 0',
-  padding: '1rem',
-  boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-});
+  margin: '0.3rem 0',
+}));
 
 export const TagsList = styled(Box)({
   display: 'flex',
   flexDirection: 'row',
   marginTop: '0.5rem',
   flexWrap: 'wrap',
+});
+
+// 새로운 생성 페이지 관련
+
+export const ImageUploadBox = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: '1px dashed rgba(0,0,0,0.1)',
+  padding: '1rem',
+  marginTop: '1.5rem',
+  cursor: 'grab',
+  borderRadius: '1rem',
 });

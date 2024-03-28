@@ -5,7 +5,7 @@ import { mirage } from 'ldrs';
 
 // project imports
 import ListHeader from '../../components/ListHeader';
-import LoadingSpinnerBox from 'src/shared/components/Loading/LoadingSpinnerBox';
+import LoadingSpinnerBox from 'src/features/post/components/LoadingSpinnerBox';
 import { ViewContainer } from 'src/shared/styles/mui';
 
 import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
