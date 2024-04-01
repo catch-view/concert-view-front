@@ -108,17 +108,17 @@ const PostDetailModal = ({ showModal }: Props) => {
           grabCursor={true}
           effect='cards'
         >
-          {modalPost?.images.map((img) => (
-            <Styled.ImageSlideBox key={img.src}>
+          {modalPost?.images.map((img, idx) => (
+            <Styled.ImageSlideBox key={idx}>
               <SwiperSlide
-                key={img.src}
+                key={idx}
                 style={{
                   borderRadius: '1rem',
                 }}
               >
                 <CardMedia
                   component='img'
-                  image={img.src}
+                  image={img}
                   alt='postimg'
                   sx={{
                     backgroundColor: 'rgba(0,0,0,0.85)',
@@ -139,7 +139,14 @@ const PostDetailModal = ({ showModal }: Props) => {
         </Swiper>
 
         <Styled.EditorContentBox
-          sx={{ boxShadow: 1 }}
+          sx={{
+            boxShadow: 1,
+            overflowX: 'hidden',
+            img: {
+              width: '100%',
+              objectFit: 'contain',
+            },
+          }}
           dangerouslySetInnerHTML={{ __html: modalPost?.html ?? '' }}
         ></Styled.EditorContentBox>
       </DialogContent>

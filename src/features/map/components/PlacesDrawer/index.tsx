@@ -24,7 +24,9 @@ interface IPlacesDrawer {
 }
 const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
   const dispatch = useAppDispatch();
-  const { userPosition, drawerSearchQuery, drawerPlaces } = useAppSelector((state) => state.map);
+  const { userPosition, drawerSearchQuery, drawerPlaces } = useAppSelector(
+    (state) => state.map
+  );
   const ps = new kakao.maps.services.Places();
   const [pageData, setPageData] = useState<{
     curPage: number;
@@ -47,7 +49,6 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
     enableReinitialize: false,
     validateOnBlur: true,
   });
-
 
   useEffect(() => {
     if (drawerSearchQuery) {
@@ -80,7 +81,8 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
    */
   const searchPlaces = () => {
     ps.keywordSearch(
-      userPosition.addressName + formik.values.searchQuery,
+      formik.values.searchQuery,
+      //userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
           const placesData = data as IKakaoPlace[];
@@ -111,11 +113,11 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
 
       {/* contents */}
       <TextField
-        id="searchQuery"
-        label="장소 키워드를 검색해보세요"
-        variant="filled"
-        name="searchQuery"
-        color="info"
+        id='searchQuery'
+        label='장소 키워드를 검색해보세요'
+        variant='filled'
+        name='searchQuery'
+        color='info'
         value={formik.values.searchQuery}
         onChange={formik.handleChange}
         onKeyDown={(e) => {

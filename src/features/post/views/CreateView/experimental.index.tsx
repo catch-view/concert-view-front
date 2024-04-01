@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Stepper,
@@ -6,7 +6,8 @@ import {
   Step,
   TextField,
   Typography,
-  Divider,
+  Fab,
+  Skeleton,
 } from '@mui/material';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import randomColor from 'randomcolor';
@@ -17,17 +18,21 @@ import { storage } from 'src/firebase';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIosNew';
 
 // project imports
 import LoadingScreen from 'src/shared/components/Loading/LoadingScreen';
 import PostTag from 'src/features/post/components/PostTag';
 import { FlexStartContainer } from 'src/shared/styles/mui';
-import { DisplayingErrorMessagesSchema } from './schemas';
 import QuillEditor2 from 'src/shared/components/QuillEditor/noImageEditor';
+import ColorlibStepIcon from './Stepper/ColorLibStepIcon';
 import useSnackAlert from 'src/shared/hooks/useSnackAlert';
 import { useCreatePostMutation } from '../../hooks/useCreatePostMutation';
 import { useCreatePostFormik } from '../../hooks/useCreatePostFormik';
+import useStepper from '../../hooks/useStepper';
 import * as Styled from './styled';
+import { ColorlibConnector } from './Stepper/styled';
 import { Tag } from '../../types';
 
 const steps = ['장소 이미지 업로드', '장소 관련 태그 입력', '장소 설명 작성'];
@@ -42,45 +47,17 @@ const CreatePostView = () => {
 
   const formik = useCreatePostFormik({ handleSubmit: handleSubmit });
 
-  const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set<number>());
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const handleSkip = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   const [tags, setTags] = useState<Tag[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [htmlValue, setHtmlValue] = useState<string>('');
-
-  const [isWriting, setIsWriting] = useState(false); // 이미지 업로드 후 컨텐츠 작성중 여부
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleEditorValuechange = useCallback((value: string) => {
     setHtmlValue(value);
   }, []);
+
+  const { activeStep, skipped, handleNext, handleBack, handleSkip } =
+    useStepper();
 
   /**
    * 게시물 저장 메서드
@@ -128,13 +105,25 @@ const CreatePostView = () => {
           getDownloadURL(snapshot.ref).then((url) => {
             setImages((current) => [...current, url]);
           });
-          setIsWriting(true);
+          handleSkip();
         });
       } catch (error) {
         alert(error);
       }
     });
   };
+
+  const handleDisplayImage = (image: string) => {
+    setImageLoaded(false);
+    const uploadedImage = new Image();
+    uploadedImage.src = image;
+    uploadedImage.onload = () => {
+      setImageLoaded(true);
+    };
+  };
+  useEffect(() => {
+    if (activeStep === 2) handleDisplayImage(images.at(-1) ?? '');
+  }, [activeStep]);
 
   const addTag = () => {
     const isExist =
@@ -237,25 +226,44 @@ const CreatePostView = () => {
         />
       </Styled.TextFieldsBox>
 
-      <Divider sx={{ marginY: '2rem' }} />
-
-      <Stepper activeStep={activeStep} sx={{ marginTop: '1.5rem' }}>
+      <Stepper
+        alternativeLabel
+        connector={<ColorlibConnector />}
+        activeStep={activeStep}
+        sx={{ marginTop: '1.5rem' }}
+      >
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
           </Step>
         ))}
       </Stepper>
-      {isWriting && (
+
+      {/**
+       * 단계별 컨텐츠
+       */}
+      {activeStep == 0 && (
+        <Styled.ImageUploadBox onClick={handleUploadClick}>
+          <AddPhotoAlternateIcon sx={{ width: '100px', height: '100px' }} />
+          <Typography variant='caption' color='grey.400' textAlign={'center'}>
+            <b>{state.placeName}</b>의
+            <br />
+            사진을 올려보세요
+          </Typography>
+        </Styled.ImageUploadBox>
+      )}
+
+      {activeStep == 1 && (
         <Styled.TagsBox>
           {/* 태그 input */}
           <TextField
-            size='small'
+            size='medium'
             variant='standard'
             id='inputTag'
             name='inputTag'
             label='#태그'
             color='info'
+            placeholder='사진을 설명할 수 있는 태그를 입력해보세요'
             value={formik.values.inputTag}
             onChange={formik.handleChange}
             onKeyDown={(e) => {
@@ -284,27 +292,44 @@ const CreatePostView = () => {
         </Styled.TagsBox>
       )}
 
-      {isWriting ? (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <img
-            src={images.at(-1)}
-            style={{ height: '320px', objectFit: 'contain' }}
-          ></img>
+      {activeStep == 2 && (
+        <Styled.EditorBox>
+          {imageLoaded ? (
+            <Styled.CurrentImageBox src={images.at(-1)} />
+          ) : (
+            <Skeleton
+              variant='rectangular'
+              sx={{ height: '320px', width: '568px', marginRight: '1rem' }}
+            />
+          )}
+
           <QuillEditor2
             htmlValue={htmlValue}
             onChange={handleEditorValuechange}
           />
-        </Box>
-      ) : (
-        <Styled.ImageUploadBox onClick={handleUploadClick}>
-          <AddPhotoAlternateIcon sx={{ width: '100px', height: '100px' }} />
-          <Typography variant='caption' color='grey.400' textAlign={'center'}>
-            <b>{state.placeName}</b>의
-            <br />
-            사진을 올려보세요
-          </Typography>
-        </Styled.ImageUploadBox>
+        </Styled.EditorBox>
       )}
+
+      <Styled.LeftFabBtnBox>
+        {activeStep > 0 && (
+          <Fab onClick={handleBack} color='secondary'>
+            <ArrowBackIosIcon />
+          </Fab>
+        )}
+      </Styled.LeftFabBtnBox>
+
+      <Styled.RightFabBtnBox>
+        {activeStep === 1 && (
+          <Fab onClick={handleSkip} color='success'>
+            <ArrowForwardIosIcon />
+          </Fab>
+        )}
+        {activeStep === 2 && (
+          <Fab color='info'>
+            <SaveIcon />
+          </Fab>
+        )}
+      </Styled.RightFabBtnBox>
     </FlexStartContainer>
   );
 };

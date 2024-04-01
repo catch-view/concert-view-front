@@ -58,8 +58,8 @@ const PostCard = (post: Type.ModalPost) => {
         scrollbar={{ draggable: true }}
         onSlideChange={() => console.log('slide change')}
       >
-        {post.images.map((img) => (
-          <SwiperSlide key={img.src}>
+        {post.images.map((img, idx) => (
+          <SwiperSlide key={idx}>
             {imageLoaded ? (
               <Box
                 sx={{

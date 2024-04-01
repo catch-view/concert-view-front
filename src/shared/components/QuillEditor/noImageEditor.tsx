@@ -8,6 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 import { quillConfig } from './quillConfig';
 
 const EditorWrapper = styled(Box)({
+  height: '100%',
   '& .ql-snow *': {
     fontFamily: 'Noto Serif KR',
   },
@@ -32,12 +33,7 @@ const QuillEditor2 = ({ htmlValue, onChange }: QuillEditorProps) => {
   return (
     <EditorWrapper>
       <ReactQuill
-        style={{
-          margin: '0.5rem',
-          border: 'none',
-          width: '',
-          height: '320px',
-        }}
+        style={{ height: '90%' }}
         ref={quillRef}
         theme={quillConfig.theme}
         modules={modules}
