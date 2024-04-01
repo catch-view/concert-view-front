@@ -6,7 +6,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.4",
-    "@mui/material": "^5.15.4",
+    "@mui/material": "^5.15.14",
     "@mui/styled-engine-sc": "^5.11.11",
     "@reduxjs/toolkit": "^1.9.7",
     "@tanstack/react-query": "^5.24.1",
@@ -80,11 +80,17 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "msw": "^2.2.13",
     "prettier": "^3.2.5",
     "typescript": "^5.4.3",
     "vite": "^5.1.6",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.1"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }

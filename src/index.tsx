@@ -9,13 +9,23 @@ import store from './store';
 // css
 import 'src/shared/styles/css';
 
+async function enableMocking() {
+  if (import.meta.env.NODE_ENV === 'development') return;
+
+  const { worker } = await import('src/shared/mocks/browser');
+  return worker.start();
+}
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
-);
+
+enableMocking().then(() => {
+  root.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  );
+});

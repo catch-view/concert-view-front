@@ -30,12 +30,13 @@ import * as Type from '../../types';
 const PostCard = (post: Type.ModalPost) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [swiperIdx, setSwiperIdx] = useState(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     // 첫번째 이미지가 로드되기 전까지 skelton 표시
     const image = new Image();
-    image.src = post.images[0].src;
+    image.src = post.contents[0].image;
     image.onload = () => {
       setImageLoaded(true);
     };
@@ -56,10 +57,12 @@ const PostCard = (post: Type.ModalPost) => {
         spaceBetween={10}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSlideChange={() => console.log('slide change')}
+        onSlideChange={(swiper) => {
+          setSwiperIdx(swiper.realIndex);
+        }}
       >
-        {post.images.map((img) => (
-          <SwiperSlide key={img.src}>
+        {post.contents.map((content) => (
+          <SwiperSlide key={content.image}>
             {imageLoaded ? (
               <Box
                 sx={{
@@ -68,7 +71,7 @@ const PostCard = (post: Type.ModalPost) => {
               >
                 <CardMedia
                   component='img'
-                  image={img.src}
+                  image={content.image}
                   alt='postimg'
                   sx={{
                     position: 'relative',
@@ -79,7 +82,7 @@ const PostCard = (post: Type.ModalPost) => {
                   }}
                 />
                 <Styled.ImageRateInfoBox>
-                  {img.rates.length ? (
+                  {content.rates.length ? (
                     <>
                       <Rating
                         value={3.55}
@@ -94,7 +97,7 @@ const PostCard = (post: Type.ModalPost) => {
                         }}
                       />
                       <Typography variant='caption' color='white'>
-                        {img.rates.length}명의 평가
+                        {content.rates.length}명의 평가
                       </Typography>
                     </>
                   ) : (
@@ -133,7 +136,7 @@ const PostCard = (post: Type.ModalPost) => {
         </Typography>
 
         <Styled.TagsBox>
-          {post?.tags.map((tag: Type.Tag) => (
+          {post?.contents[swiperIdx].tags.map((tag: Type.Tag) => (
             <PostTag key={tag.label} {...tag} />
           ))}
         </Styled.TagsBox>
