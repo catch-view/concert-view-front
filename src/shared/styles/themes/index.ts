@@ -1,5 +1,5 @@
 import { ThemeOptions } from '@mui/material';
-import createTheme from '@mui/material/styles/createTheme';
+import { createTheme } from '@mui/material/styles';
 import Palatte from './palette';
 
 const theme = (mode: string) => {

@@ -8,18 +8,26 @@ import {
   Typography,
   Fab,
   Skeleton,
+  Tooltip,
 } from '@mui/material';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import randomColor from 'randomcolor';
-import { uploadBytes, getDownloadURL, ref } from 'firebase/storage';
+import {
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+  ref,
+} from 'firebase/storage';
 import { storage } from 'src/firebase';
 
 // icons
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CancelIcon from '@mui/icons-material/Cancel';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIosNew';
+import DoneIcon from '@mui/icons-material/Done';
 
 // project imports
 import LoadingScreen from 'src/shared/components/Loading/LoadingScreen';
@@ -33,7 +41,7 @@ import { useCreatePostFormik } from '../../hooks/useCreatePostFormik';
 import useStepper from '../../hooks/useStepper';
 import * as Styled from './styled';
 import { ColorlibConnector } from './Stepper/styled';
-import { Tag } from '../../types';
+import { Tag, PostContent } from '../../types';
 
 const steps = ['장소 이미지 업로드', '장소 관련 태그 입력', '장소 설명 작성'];
 
@@ -48,16 +56,25 @@ const CreatePostView = () => {
   const formik = useCreatePostFormik({ handleSubmit: handleSubmit });
 
   const [tags, setTags] = useState<Tag[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+  const [currentImage, setCurrentImage] = useState('');
   const [htmlValue, setHtmlValue] = useState<string>('');
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [contents, setContents] = useState<
+    Pick<PostContent, 'image' | 'tags' | 'description'>[]
+  >([]);
 
   const handleEditorValuechange = useCallback((value: string) => {
     setHtmlValue(value);
   }, []);
 
-  const { activeStep, skipped, handleNext, handleBack, handleSkip } =
-    useStepper();
+  const {
+    activeStep,
+    skipped,
+    handleNext,
+    handleBack,
+    handleSkip,
+    handleReset,
+  } = useStepper();
 
   /**
    * 게시물 저장 메서드
@@ -65,12 +82,10 @@ const CreatePostView = () => {
   async function handleSubmit() {
     const { result, message } = await mutateAsync({
       placeID: state.placeID,
-      tags: tags,
       author: formik.values.author,
       password: formik.values.password,
       title: formik.values.title,
-      images: images,
-      html: htmlValue,
+      contents: contents,
       createdAt: new Date(),
     });
     if (result) {
@@ -88,6 +103,10 @@ const CreatePostView = () => {
   }
 
   const handleUploadClick = () => {
+    if (contents.length === 3) {
+      activateSnack('최대 세 개의 컨텐츠까지 등록 가능합니다', 'info');
+      return;
+    }
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -103,7 +122,7 @@ const CreatePostView = () => {
         // Firebase Method : uploadBytes, getDownloadURL
         await uploadBytes(storageRef, file).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            setImages((current) => [...current, url]);
+            setCurrentImage(url);
           });
           handleSkip();
         });
@@ -121,8 +140,38 @@ const CreatePostView = () => {
       setImageLoaded(true);
     };
   };
+
+  const clearFields = () => {
+    setTags([]);
+    setHtmlValue('');
+  };
+  const addContent = () => {
+    setContents([
+      ...contents,
+      {
+        image: currentImage ?? '',
+        tags: tags,
+        description: htmlValue,
+      },
+    ]);
+
+    clearFields();
+    handleReset();
+  };
+
+  const deleteContent = async (image: string) => {
+    await deleteObject(ref(storage, image))
+      .then(() => {
+        const filtered = contents.filter((content) => content.image != image);
+        setContents(filtered);
+      })
+      .catch((err) => {
+        activateSnack('error', 'danger');
+      });
+  };
+
   useEffect(() => {
-    if (activeStep === 2) handleDisplayImage(images.at(-1) ?? '');
+    if (activeStep === 2) handleDisplayImage(currentImage);
   }, [activeStep]);
 
   const addTag = () => {
@@ -161,15 +210,12 @@ const CreatePostView = () => {
           #{state.addressName}
         </Typography>
       </Styled.TopTextBox>
-
       <Styled.TextFieldsBox>
         <Box
           sx={{
             display: 'grid',
-            justifyContent: 'flex-start',
-            marginBottom: '1rem',
             gridTemplateColumns: '1fr 1fr',
-            columnGap: '15px',
+            marginRight: '2rem',
           }}
         >
           {/* 작성자 input */}
@@ -207,25 +253,52 @@ const CreatePostView = () => {
               Boolean(formik.values.password.length) && formik.errors.password
             }
           />
+          <TextField
+            size='small'
+            variant='standard'
+            id='title'
+            name='title'
+            label='제목'
+            color='success'
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            error={
+              Boolean(formik.values.title.length) &&
+              Boolean(formik.errors.title)
+            }
+            helperText={
+              Boolean(formik.values.title.length) && formik.errors.title
+            }
+          />
         </Box>
-        <TextField
-          size='small'
-          variant='standard'
-          id='title'
-          name='title'
-          label='제목'
-          color='success'
-          value={formik.values.title}
-          onChange={formik.handleChange}
-          error={
-            Boolean(formik.values.title.length) && Boolean(formik.errors.title)
-          }
-          helperText={
-            Boolean(formik.values.title.length) && formik.errors.title
-          }
-        />
+        <Styled.UploadedImagesBox>
+          {contents.map((content, idx) => (
+            <Styled.UploadedImageCard
+              key={content.image}
+              style={{
+                width: '160px',
+                height: '90px',
+                objectFit: 'contain',
+                borderRadius: '10px',
+                //backgroundColor: 'rgba(0,0,0,0.8)',
+                backgroundImage: `url(${content.image})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <Styled.RedDot
+                color='error'
+                onClick={async () => {
+                  await deleteContent(content.image);
+                }}
+              >
+                <DeleteIcon sx={{ color: 'white' }} />
+              </Styled.RedDot>
+            </Styled.UploadedImageCard>
+          ))}
+        </Styled.UploadedImagesBox>
       </Styled.TextFieldsBox>
-
       <Stepper
         alternativeLabel
         connector={<ColorlibConnector />}
@@ -238,7 +311,6 @@ const CreatePostView = () => {
           </Step>
         ))}
       </Stepper>
-
       {/**
        * 단계별 컨텐츠
        */}
@@ -291,11 +363,10 @@ const CreatePostView = () => {
           </Styled.TagsList>
         </Styled.TagsBox>
       )}
-
       {activeStep == 2 && (
         <Styled.EditorBox>
           {imageLoaded ? (
-            <Styled.CurrentImageBox src={images.at(-1)} />
+            <Styled.CurrentImageBox src={currentImage} />
           ) : (
             <Skeleton
               variant='rectangular'
@@ -309,7 +380,6 @@ const CreatePostView = () => {
           />
         </Styled.EditorBox>
       )}
-
       <Styled.LeftFabBtnBox>
         {activeStep > 0 && (
           <Fab onClick={handleBack} color='secondary'>
@@ -317,16 +387,29 @@ const CreatePostView = () => {
           </Fab>
         )}
       </Styled.LeftFabBtnBox>
-
       <Styled.RightFabBtnBox>
+        {activeStep === 0 && contents.length === 3 && (
+          <Tooltip title='저장하기'>
+            <Fab
+              sx={{
+                backgroundColor: '#3e83de',
+                color: 'white',
+                '&:hover': { backgroundColor: '#3e83de' },
+              }}
+              onClick={handleSubmit}
+            >
+              <SaveIcon />
+            </Fab>
+          </Tooltip>
+        )}
         {activeStep === 1 && (
           <Fab onClick={handleSkip} color='success'>
             <ArrowForwardIosIcon />
           </Fab>
         )}
         {activeStep === 2 && (
-          <Fab color='info'>
-            <SaveIcon />
+          <Fab color='info' onClick={addContent}>
+            <DoneIcon />
           </Fab>
         )}
       </Styled.RightFabBtnBox>

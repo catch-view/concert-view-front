@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Box,
   Dialog,
@@ -28,6 +28,7 @@ type Props = {
   showModal: boolean;
 };
 const PostDetailModal = ({ showModal }: Props) => {
+  const [curSwiperIdx, setCurSwiperIdx] = useState(0);
   const { ip } = useAppSelector((state) => state.user);
   const { modalPost } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
@@ -107,18 +108,19 @@ const PostDetailModal = ({ showModal }: Props) => {
           pagination={{ clickable: true }}
           grabCursor={true}
           effect='cards'
+          onSlideChange={(swiper) => setCurSwiperIdx(swiper.activeIndex)}
         >
-          {modalPost?.images.map((img, idx) => (
-            <Styled.ImageSlideBox key={idx}>
+          {modalPost?.contents.map((content, idx) => (
+            <Styled.ImageSlideBox key={content.image}>
               <SwiperSlide
-                key={idx}
+                key={content.image}
                 style={{
                   borderRadius: '1rem',
                 }}
               >
                 <CardMedia
                   component='img'
-                  image={img}
+                  image={content.image}
                   alt='postimg'
                   sx={{
                     backgroundColor: 'rgba(0,0,0,0.85)',
@@ -147,7 +149,9 @@ const PostDetailModal = ({ showModal }: Props) => {
               objectFit: 'contain',
             },
           }}
-          dangerouslySetInnerHTML={{ __html: modalPost?.html ?? '' }}
+          dangerouslySetInnerHTML={{
+            __html: modalPost?.contents[curSwiperIdx]?.description ?? '',
+          }}
         ></Styled.EditorContentBox>
       </DialogContent>
     </Dialog>

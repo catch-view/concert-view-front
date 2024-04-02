@@ -2,7 +2,7 @@ export type PostSliceState = {
   modalPost: ModalPost | null;
 };
 
-export type Post = {
+/* export type Post = {
   postID: string;
   placeID: string;
   author: string;
@@ -11,7 +11,7 @@ export type Post = {
   html: string;
   createdAt: string;
   tags: Tag[];
-};
+}; */
 
 export type ModalPost = Post & {
   placeID: string;
@@ -35,19 +35,19 @@ export type ImageRate = {
   rate: number;
 };
 
-export type NewPostContent = {
+export type PostContent = {
   image: string;
   rates: ImageRate[];
   tags: Tag[];
   description: string;
 };
 
-export type NewPost = {
+export type Post = {
   postID: string;
   placeID: string;
   title: string;
   author: string;
   password: string;
-  contents: NewPostContent[];
+  contents: PostContent[];
   createdAt: string;
 };

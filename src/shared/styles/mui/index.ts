@@ -12,4 +12,7 @@ export const ViewContainer = styled(Box)({
   overflow: 'hidden',
 });
 
-export const FlexStartContainer = styled(Container)({});
+export const FlexStartContainer = styled(Container)({
+  position: 'relative',
+  height: '100vh',
+});

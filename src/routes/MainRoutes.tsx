@@ -7,7 +7,6 @@ import CreatePostViewExp from 'src/features/post/views/CreateView/experimental.i
 
 const MainRoutes = {
   path: '/',
-  // eslint-disable-next-line react/react-in-jsx-scope
   element: <DefaultLayout />,
   children: [
     {
@@ -20,7 +19,7 @@ const MainRoutes = {
     },
     {
       path: '/Post/Create/:id',
-      element: <CreatePostView />,
+      element: <CreatePostViewExp />,
     },
   ],
 };
