@@ -30,7 +30,7 @@ const PostView = () => {
   }, []);
 
   return (
-    <ViewContainer>
+    <ViewContainer maxWidth='xl'>
       <ListHeader
         placeID={state?.placeID ?? ''}
         placeName={state?.placeName ?? ''}
@@ -41,6 +41,8 @@ const PostView = () => {
         fallback={
           <Box
             sx={{
+              display: 'flex',
+              justifyContent: 'center',
               margin: '5rem',
             }}
           >
@@ -50,25 +52,25 @@ const PostView = () => {
       >
         <Grid container justifyContent={'center'} spacing={2}>
           {posts?.map((post: Post) => (
-            <LazyPostCard
-              key={post.postID}
-              {...{
-                ...post,
-                placeName: state?.placeName ?? '',
-                addressName: state?.addressName ?? '',
+            <Grid item key={post.postID} sm={12} md={12} lg={6}>
+              <LazyPostCard
+                {...{
+                  ...post,
+                  placeName: state?.placeName ?? '',
+                  addressName: state?.addressName ?? '',
+                }}
+              />
+            </Grid>
+          ))}
+          {hasNextPage && (
+            <LoadingSpinnerBox
+              callback={() => {
+                !isFetchingNextPage && fetchNextPage();
               }}
             />
-          ))}
+          )}
         </Grid>
       </Suspense>
-
-      {hasNextPage && (
-        <LoadingSpinnerBox
-          callback={() => {
-            !isFetchingNextPage && fetchNextPage();
-          }}
-        />
-      )}
     </ViewContainer>
   );
 };

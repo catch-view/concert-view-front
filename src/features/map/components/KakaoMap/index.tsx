@@ -1,34 +1,38 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Map } from 'react-kakao-maps-sdk';
 
 // project imports
 import UserMarker from '../Marker/UserMarker';
 import PlaceMarker from '../Marker/PlaceMarker';
-import { useAppSelector, useAppDispatch } from 'src/store/hook';
-import { setFocusingPlace } from 'src/features/map/redux/slice';
+import { useAppSelector } from 'src/store/hook';
 
 const KakaoMap = () => {
   const { userPosition, focusingPlace } = useAppSelector((state) => state.map);
-  const dispatch = useAppDispatch();
+  const [mapCenter, setMapCenter] = useState({
+    lat: 0,
+    lng: 0,
+  });
 
-  // 최초 렌더링 시 현재 사용자 접속 위치 focusing
+  // 최초 접속 시 접속자 위치로 포커싱
   useEffect(() => {
-    dispatch(
-      setFocusingPlace({
-        ...focusingPlace,
-        lat: userPosition.lat,
-        lng: userPosition.lng,
-      })
-    );
+    setMapCenter({
+      lat: userPosition.lat ?? 0,
+      lng: userPosition.lng ?? 0,
+    });
   }, [userPosition]);
+
+  // 포커싱 장소 변경 시 해당 장소로 포커싱
+  useEffect(() => {
+    setMapCenter({
+      lat: focusingPlace.lat ? focusingPlace.lat + 0.003 : 0,
+      lng: focusingPlace.lng ?? 0,
+    });
+  }, [focusingPlace]);
 
   return (
     <Map
       id='map'
-      center={{
-        lat: focusingPlace.lat ?? 0,
-        lng: focusingPlace.lng ?? 0,
-      }}
+      center={mapCenter}
       isPanto={true}
       style={{
         // 지도의 크기

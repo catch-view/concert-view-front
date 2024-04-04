@@ -9,7 +9,7 @@ export const DrawerBox = styled(Box)((props: DrawerBoxProps) => ({
   right: 0,
   bottom: 0,
   width: '330px',
-  height: '80%',
+  height: '85%',
   margin: '2rem',
   padding: '5px',
   background: 'rgba(255, 255, 255, 0.8)',

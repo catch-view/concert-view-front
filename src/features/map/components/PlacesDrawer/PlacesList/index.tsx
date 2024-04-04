@@ -34,7 +34,6 @@ const PlacesList = ({ places }: IPlacesList) => {
         <ListItem
           key={place.id}
           onClick={() => {
-            console.log(place);
             dispatch(
               setFocusingPlace({
                 addressName: place.address_name,

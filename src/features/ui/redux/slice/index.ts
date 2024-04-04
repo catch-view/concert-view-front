@@ -8,17 +8,21 @@ const uiSlice = createSlice({
   initialState: {
     ...layoutState,
     ...snackAlertState,
-    ...modalState
+    ...modalState,
   },
 
   reducers: {
     ...layoutSlice,
     ...snackAlertSlice,
-    ...modalSlice
+    ...modalSlice,
   },
 });
 
-export const { toggleShowAppSidebar, setSnackInfo, setModalType, toggleShowModal } =
-  uiSlice.actions;
+export const {
+  toggleShowAppSidebar,
+  setSnackInfo,
+  setModalType,
+  toggleShowModal,
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

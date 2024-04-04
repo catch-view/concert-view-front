@@ -14,7 +14,9 @@ interface StyledMainProps {
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
 })<StyledMainProps>(({ theme, open }) => ({
-  //...theme.typography.mainContent,
+  flexGrow: 1,
+  height: '100vh',
+  overflow: 'auto',
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
   transition: theme.transitions.create(
@@ -29,22 +31,11 @@ const Main = styled('main', {
           duration: theme.transitions.duration.leavingScreen,
         }
   ),
-  marginTop: 70,
-  [theme.breakpoints.up('md')]: {
-    marginLeft: 0,
-    width: '100%',
+
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: open ? 0 : theme.spacing(8) + '1px',
   },
-  [theme.breakpoints.down('md')]: {
-    marginLeft: '20px',
-    width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    padding: '16px',
-  },
-  [theme.breakpoints.down('sm')]: {
-    marginLeft: '10px',
-    width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    padding: '16px',
-    marginRight: '10px',
-  },
+  width: `calc(100% - ${DRAWER_WIDTH}px)`,
 }));
 
 const DefaultLayout = () => {

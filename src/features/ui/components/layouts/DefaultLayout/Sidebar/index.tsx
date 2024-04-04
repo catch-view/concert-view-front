@@ -13,7 +13,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 // project imports
 import MenuList from './MenuList';
-import { ISidebarProps } from './interface';
+import { ISidebarProps } from './types';
 import { DRAWER_WIDTH } from 'src/features/ui/constants';
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -40,18 +40,27 @@ const closedMixin = (theme: Theme): CSSObject => ({
 const MuiDrawer = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
-  width: DRAWER_WIDTH,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
+  '& .MuiDrawer-paper': {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: DRAWER_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: 'border-box',
+    ...(!open && {
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
 }));
 
 const SidebarHeader = styled(Box)(({ theme }) => ({
@@ -68,7 +77,7 @@ const AppSidebar = ({
   toggleShowAppSidebar,
 }: ISidebarProps) => {
   return (
-    <MuiDrawer variant="permanent" open={showAppSidebar}>
+    <MuiDrawer variant='permanent' open={showAppSidebar}>
       <SidebarHeader>
         <IconButton
           onClick={() => {

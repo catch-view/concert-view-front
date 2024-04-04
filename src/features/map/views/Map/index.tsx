@@ -37,14 +37,15 @@ const HomeView = () => {
   }, [loaded]);
 
   return (
-    <ViewContainer>
+    <ViewContainer maxWidth='xl'>
       <Styled.MapHeader>
         <Styled.UserPosCard>접속 위치: {address}</Styled.UserPosCard>
         <IconButton
-          size="small"
+          size='small'
           sx={{
             display: showPlacesDrawer ? 'none' : '',
             zIndex: 60,
+            color: 'white',
           }}
           onClick={toggleShowPlacesDrawer}
         >

@@ -39,4 +39,14 @@ export type IKakaoPlace = {
   road_address_name: string;
   x: string;
   y: string;
-}
+};
+
+export type Thumbnail = {
+  image: string;
+  avgRate: number;
+};
+export type PlaceSummary = {
+  placeID: string;
+  thumbnails: Thumbnail[];
+  ratesCnt: number;
+};

@@ -29,7 +29,7 @@ const Marker = ({ position }: IMarker) => {
       />
       {focusingPlace.placeName && (
         <CustomOverlayMap
-          yAnchor={1.28}
+          yAnchor={1.16}
           position={{ lat: position.lat, lng: position.lng }}
         >
           <PlaceOverlay {...focusingPlace} />

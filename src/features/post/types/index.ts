@@ -1,17 +1,7 @@
 export type PostSliceState = {
   modalPost: ModalPost | null;
+  listMode: 'posts' | 'images';
 };
-
-/* export type Post = {
-  postID: string;
-  placeID: string;
-  author: string;
-  images: PostImage[];
-  title: string;
-  html: string;
-  createdAt: string;
-  tags: Tag[];
-}; */
 
 export type ModalPost = Post & {
   placeID: string;

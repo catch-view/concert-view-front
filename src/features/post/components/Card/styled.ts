@@ -1,22 +1,32 @@
 import { Box, Card, CardContent, styled } from '@mui/material';
 
-export const PostCard = styled(Card)({
+export const PostCard = styled(Card)(({ theme }) => ({
   display: 'flex',
-  width: '820px',
+  [theme.breakpoints.up('md')]: {
+    width: '780px',
+  },
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+  },
   backgroundColor: 'white',
-  padding: '14px',
+  padding: '.1rem',
   margin: '0.5rem 0',
   border: 'transparent',
   boxShadow:
-    '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-});
+    '0 15px 20px -2px rgb(0 0 0 / 0.1), 0 6px 8px -4px rgb(0 0 0 / 0.1)',
+}));
 
-export const PostContentBox = styled(CardContent)({
-  display: 'flex',
+export const PostContentBox = styled(CardContent)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.up('md')]: {
+    display: 'flex',
+  },
   flexDirection: 'column',
   flex: '1 0 auto',
   width: '320px',
-});
+}));
 
 export const TagsBox = styled(Box)({
   display: 'flex',
@@ -39,6 +49,7 @@ export const AuthorInfo = styled(Box)({
   flexDirection: 'column',
   borderRadius: '16px',
   marginTop: '2px',
+  marginLeft: '0.5rem',
 });
 
 export const ImageRateInfoBox = styled(Box)({

@@ -31,26 +31,19 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
+  backgroundColor: 'white',
+  color: 'rgba(0,0,0,0.8)',
 }));
 
 const AppHeader = ({ showAppSidebar, toggleShowAppSidebar }: IHeaderProps) => {
-  const theme = useTheme();
-
   return (
-    <AppBar
-      position="fixed"
-      open={showAppSidebar}
-      sx={{
-        backgroundColor: 'white',
-        color: 'rgba(0,0,0,0.8)',
-      }}
-    >
-      <Toolbar>
+    <AppBar position='absolute' open={showAppSidebar}>
+      <Toolbar sx={{ pr: '24px' }}>
         <IconButton
-          color="inherit"
-          aria-label="open drawer"
+          color='inherit'
+          aria-label='open drawer'
           onClick={toggleShowAppSidebar}
-          edge="start"
+          edge='start'
           sx={{
             marginRight: 5,
             ...(showAppSidebar && { display: 'none' }),

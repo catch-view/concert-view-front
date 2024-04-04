@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // import Swiper
 import { Pagination } from 'swiper/modules';
@@ -8,14 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // mui
-import {
-  Avatar,
-  CardContent,
-  CardMedia,
-  Typography,
-  Rating,
-  Box,
-} from '@mui/material';
+import { Avatar, CardMedia, Typography, Rating, Box } from '@mui/material';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 // project imports
@@ -24,12 +16,12 @@ import CardMediaSkeleton from 'src/features/post/components/skeletons/CardMediaS
 import { useAppDispatch } from 'src/store/hook';
 import { toggleShowModal, setModalType } from 'src/features/ui/redux/slice';
 import { setModalPost } from '../../redux/slice';
+import { formatKoreanTextCompareDatesFromNow } from 'src/shared/utils/format/date';
 import * as Styled from './styled';
 import * as Type from '../../types';
 
 const PostCard = (post: Type.ModalPost) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [curSwiperIdx, setCurSwiperIdx] = useState(0);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
@@ -50,18 +42,18 @@ const PostCard = (post: Type.ModalPost) => {
 
   return (
     <Styled.PostCard variant='outlined'>
-      <Swiper
-        // install Swiper modules
-        modules={[Pagination]}
-        slidesPerView={1}
-        spaceBetween={10}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSlideChange={(swiper) => setCurSwiperIdx(swiper.activeIndex)}
-      >
-        {post?.contents?.map((content, idx) => (
-          <SwiperSlide key={content.image}>
-            {imageLoaded ? (
+      {imageLoaded ? (
+        <Swiper
+          // install Swiper modules
+          modules={[Pagination]}
+          slidesPerView={1}
+          spaceBetween={10}
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+          onSlideChange={(swiper) => setCurSwiperIdx(swiper.activeIndex)}
+        >
+          {post?.contents?.map((content, idx) => (
+            <SwiperSlide key={content.image}>
               <Box
                 sx={{
                   position: 'relative',
@@ -75,8 +67,7 @@ const PostCard = (post: Type.ModalPost) => {
                     position: 'relative',
                     height: '260px',
                     objectFit: 'contain',
-                    borderRadius: '16px',
-                    padding: '1%',
+                    backgroundColor: 'rgba(0,0,0,0.7)',
                   }}
                 />
                 <Styled.ImageRateInfoBox>
@@ -118,12 +109,12 @@ const PostCard = (post: Type.ModalPost) => {
                   )}
                 </Styled.ImageRateInfoBox>
               </Box>
-            ) : (
-              <CardMediaSkeleton />
-            )}
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <CardMediaSkeleton />
+      )}
       <Styled.PostContentBox>
         <Typography
           variant='h5'
@@ -154,7 +145,7 @@ const PostCard = (post: Type.ModalPost) => {
               color='#AAADB2'
               sx={{ fontSize: 14 }}
             >
-              {post.createdAt}
+              {formatKoreanTextCompareDatesFromNow(post.createdAt)}
             </Typography>
           </Styled.AuthorInfo>
         </Styled.AuthorInfoBox>

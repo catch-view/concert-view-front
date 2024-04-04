@@ -81,7 +81,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
    */
   const searchPlaces = () => {
     ps.keywordSearch(
-      formik.values.searchQuery,
+      userPosition.addressName + formik.values.searchQuery,
       //userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
