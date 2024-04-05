@@ -1,19 +1,25 @@
-import { Select, MenuItem, Typography, SelectChangeEvent } from '@mui/material';
-import { useState } from 'react';
-import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
+import { FormControlLabel, Typography, Checkbox } from '@mui/material';
+
+import { useAppSelector, useAppDispatch } from 'src/store/hook';
+import { setListMode } from '../../redux/slice';
 import { Wrapper, PlaceInfoBox, UtilBox } from './styled';
 
 type Props = {
-  placeID: string;
+  listMode: 'posts' | 'images';
   placeName: string;
   addressName: string;
 };
-const ListHeader = ({ placeID, placeName, addressName }: Props) => {
-  const [sortOption, setSortOption] = useState('posts');
+const ListHeader = ({ listMode, placeName, addressName }: Props) => {
+  const dispatch = useAppDispatch();
 
-  const handleSortOptionChange = (event: SelectChangeEvent) => {
-    setSortOption(event.target.value as string);
+  const setListModeToPosts = () => {
+    dispatch(setListMode('posts'));
   };
+
+  const setListModeToImages = () => {
+    dispatch(setListMode('images'));
+  };
+
   return (
     <Wrapper>
       <PlaceInfoBox>
@@ -26,16 +32,24 @@ const ListHeader = ({ placeID, placeName, addressName }: Props) => {
       </PlaceInfoBox>
 
       <UtilBox>
-        <Select
-          color='info'
-          value={sortOption}
-          onChange={handleSortOptionChange}
-          label='정렬옵션'
-          size='small'
-        >
-          <MenuItem value='posts'>posts</MenuItem>
-          <MenuItem value='images'>images</MenuItem>
-        </Select>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={listMode === 'posts'}
+              onChange={setListModeToPosts}
+            />
+          }
+          label='게시물로 보기'
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={listMode === 'images'}
+              onChange={setListModeToImages}
+            />
+          }
+          label='이미지로 보기'
+        />
       </UtilBox>
     </Wrapper>
   );

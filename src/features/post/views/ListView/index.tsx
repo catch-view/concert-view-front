@@ -7,7 +7,9 @@ import { mirage } from 'ldrs';
 import ListHeader from '../../components/ListHeader';
 import LoadingSpinnerBox from 'src/features/post/components/LoadingSpinnerBox';
 import { ViewContainer } from 'src/shared/styles/mui';
+import ImagesBox from '../../components/ImagesBox';
 
+import { useAppSelector } from 'src/store/hook';
 import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
 import { Post } from '../../types';
 import * as Styled from './styled';
@@ -18,6 +20,7 @@ mirage.register();
 const PostView = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { listMode } = useAppSelector((state) => state.post);
   const { isFetchingNextPage, isFetching, data, hasNextPage, fetchNextPage } =
     useGetInfinitePosts(state?.placeID ?? '');
 
@@ -33,7 +36,7 @@ const PostView = () => {
   return (
     <ViewContainer maxWidth='xl'>
       <ListHeader
-        placeID={state?.placeID ?? ''}
+        listMode={listMode}
         placeName={state?.placeName ?? ''}
         addressName={state?.addressName ?? ''}
       />
@@ -51,24 +54,29 @@ const PostView = () => {
           </Box>
         }
       >
-        <Styled.PostsWrapper sx={{ marginBottom: '5rem' }}>
-          {posts?.map((post: Post) => (
-            <LazyPostCard
-              {...{
-                ...post,
-                placeName: state?.placeName ?? '',
-                addressName: state?.addressName ?? '',
-              }}
-            />
-          ))}
-          {hasNextPage && !isFetching && (
-            <LoadingSpinnerBox
-              callback={() => {
-                !isFetchingNextPage && fetchNextPage();
-              }}
-            />
-          )}
-        </Styled.PostsWrapper>
+        {listMode === 'posts' && (
+          <Styled.PostsWrapper sx={{ marginBottom: '5rem' }}>
+            {posts?.map((post: Post) => (
+              <LazyPostCard
+                key={post.postID}
+                {...{
+                  ...post,
+                  placeName: state?.placeName ?? '',
+                  addressName: state?.addressName ?? '',
+                }}
+              />
+            ))}
+            {hasNextPage && !isFetching && (
+              <LoadingSpinnerBox
+                callback={() => {
+                  !isFetchingNextPage && fetchNextPage();
+                }}
+              />
+            )}
+          </Styled.PostsWrapper>
+        )}
+
+        {listMode === 'images' && <ImagesBox posts={posts} />}
       </Suspense>
     </ViewContainer>
   );
