@@ -2,8 +2,11 @@ import { Box, Card, CardContent, styled } from '@mui/material';
 
 export const PostCard = styled(Card)(({ theme }) => ({
   display: 'flex',
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.only('md')]: {
     width: '780px',
+  },
+  [theme.breakpoints.up('lg')]: {
+    width: '90%',
   },
   [theme.breakpoints.down('md')]: {
     width: '100%',
@@ -22,6 +25,7 @@ export const PostContentBox = styled(CardContent)(({ theme }) => ({
   },
   [theme.breakpoints.up('md')]: {
     display: 'flex',
+    width: '38%',
   },
   flexDirection: 'column',
   flex: '1 0 auto',

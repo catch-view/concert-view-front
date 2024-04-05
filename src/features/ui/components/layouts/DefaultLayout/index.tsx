@@ -31,7 +31,7 @@ const Main = styled('main', {
           duration: theme.transitions.duration.leavingScreen,
         }
   ),
-
+  marginTop: 70,
   [theme.breakpoints.up('sm')]: {
     marginLeft: open ? 0 : theme.spacing(8) + '1px',
   },

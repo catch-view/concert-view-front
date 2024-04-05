@@ -1,6 +1,6 @@
 import { useEffect, useMemo, Suspense, lazy } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { mirage } from 'ldrs';
 
 // project imports
@@ -10,6 +10,7 @@ import { ViewContainer } from 'src/shared/styles/mui';
 
 import { useGetInfinitePosts } from '../../hooks/useInfinitePosts';
 import { Post } from '../../types';
+import * as Styled from './styled';
 
 const LazyPostCard = lazy(() => import('../../components/Card'));
 mirage.register();
@@ -17,7 +18,7 @@ mirage.register();
 const PostView = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { isFetchingNextPage, data, hasNextPage, fetchNextPage } =
+  const { isFetchingNextPage, isFetching, data, hasNextPage, fetchNextPage } =
     useGetInfinitePosts(state?.placeID ?? '');
 
   const posts = useMemo(
@@ -50,26 +51,24 @@ const PostView = () => {
           </Box>
         }
       >
-        <Grid container justifyContent={'center'} spacing={2}>
+        <Styled.PostsWrapper sx={{ marginBottom: '5rem' }}>
           {posts?.map((post: Post) => (
-            <Grid item key={post.postID} sm={12} md={12} lg={6}>
-              <LazyPostCard
-                {...{
-                  ...post,
-                  placeName: state?.placeName ?? '',
-                  addressName: state?.addressName ?? '',
-                }}
-              />
-            </Grid>
+            <LazyPostCard
+              {...{
+                ...post,
+                placeName: state?.placeName ?? '',
+                addressName: state?.addressName ?? '',
+              }}
+            />
           ))}
-          {hasNextPage && (
+          {hasNextPage && !isFetching && (
             <LoadingSpinnerBox
               callback={() => {
                 !isFetchingNextPage && fetchNextPage();
               }}
             />
           )}
-        </Grid>
+        </Styled.PostsWrapper>
       </Suspense>
     </ViewContainer>
   );

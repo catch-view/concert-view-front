@@ -65,7 +65,7 @@ const PostCard = (post: Type.ModalPost) => {
                   alt='postimg'
                   sx={{
                     position: 'relative',
-                    height: '260px',
+                    height: { xs: '260px', sm: '260px', lg: '360px' },
                     objectFit: 'contain',
                     backgroundColor: 'rgba(0,0,0,0.7)',
                   }}

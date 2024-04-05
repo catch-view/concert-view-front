@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { IntersectionOptions, useInView } from "react-intersection-observer";
+import { useEffect } from 'react';
+import { IntersectionOptions, useInView } from 'react-intersection-observer';
 
 export type UseIntersectionObserverProps = {
   callback: () => void;
@@ -8,7 +8,7 @@ export type UseIntersectionObserverProps = {
 
 export const useIntersectionObserver = ({
   callback,
-  intersectionOptions = { threshold: 0.3 },
+  intersectionOptions = { threshold: 0.7 },
 }: UseIntersectionObserverProps) => {
   const { ref, inView } = useInView(intersectionOptions);
 
@@ -16,7 +16,7 @@ export const useIntersectionObserver = ({
     if (inView) {
       callback();
     }
-  }, [callback, inView])
+  }, [callback, inView]);
 
-  return { ref, inView }
+  return { ref, inView };
 };
