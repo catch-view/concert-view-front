@@ -67,7 +67,7 @@ const PostCard = (post: Type.ModalPost) => {
                     position: 'relative',
                     height: { xs: '260px', sm: '260px', lg: '320px' },
                     objectFit: 'contain',
-                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    backgroundColor: 'rgba(0,0,0,0.8)',
                   }}
                 />
                 <Styled.ImageRateInfoBox>
