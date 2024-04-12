@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppSelector, useAppDispatch } from 'src/store/hook';
 import { setDrawerPlaces, setDrawerSearchQuery } from '../../redux/slice';
 import PlacesList from './PlacesList';
-import { IKakaoPlace } from '../../types';
+import { KakaoPlace } from '../../types';
 import * as Styled from './styled';
 import { DisplayingErrorMessagesSchema } from './schemas';
 
@@ -66,7 +66,7 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
       userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-          const placesData = data as IKakaoPlace[];
+          const placesData = data as KakaoPlace[];
           dispatch(setDrawerPlaces(placesData));
         }
       },
@@ -77,15 +77,14 @@ const PlacesDrawer = ({ open, toggleOpenDrawer }: IPlacesDrawer) => {
   };
 
   /**
-   * 장소 검색 메서드
+   * 장소 키워드 검색 메서드
    */
   const searchPlaces = () => {
     ps.keywordSearch(
       userPosition.addressName + formik.values.searchQuery,
-      //userPosition.addressName + formik.values.searchQuery,
       (data, status, _pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-          const placesData = data as IKakaoPlace[];
+          const placesData = data as KakaoPlace[];
           dispatch(setDrawerPlaces(placesData));
           setPageData({ ...pageData, totalPages: _pagination.last });
         }

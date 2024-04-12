@@ -23,10 +23,10 @@ export type MapSliceState = {
   userPosition: Position;
   focusingPlace: Place;
   drawerSearchQuery: string;
-  drawerPlaces: IKakaoPlace[];
+  drawerPlaces: KakaoPlace[];
 };
 
-export type IKakaoPlace = {
+export type KakaoPlace = {
   address_name: string;
   category_group_code: string;
   category_group_name: string;

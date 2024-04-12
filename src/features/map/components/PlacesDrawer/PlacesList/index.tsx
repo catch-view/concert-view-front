@@ -15,10 +15,10 @@ import PlaceCard from './PlaceCard';
 import { useAppDispatch } from 'src/store/hook';
 import { setFocusingPlace } from '../../../redux/slice';
 
-import { IKakaoPlace } from './interface';
+import { KakaoPlace } from './interface';
 
 interface IPlacesList {
-  places: IKakaoPlace[];
+  places: KakaoPlace[];
 }
 const PlacesList = ({ places }: IPlacesList) => {
   const dispatch = useAppDispatch();

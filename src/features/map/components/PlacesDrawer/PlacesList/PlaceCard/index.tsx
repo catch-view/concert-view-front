@@ -1,9 +1,9 @@
 import { Card, CardContent, Typography } from '@mui/material';
 
 // interfaces
-import { IKakaoPlace } from '../interface';
+import { KakaoPlace } from '../interface';
 
-const PlaceCard = (place: IKakaoPlace) => {
+const PlaceCard = (place: KakaoPlace) => {
   return (
     <Card sx={{ width: '100%', backgroundColor: 'white', cursor: 'pointer' }}>
       <CardContent>

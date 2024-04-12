@@ -41,13 +41,17 @@ const mapSlice = createSlice({
       state.drawerSearchQuery = action.payload;
     },
 
-    setDrawerPlaces: (state, action: PayloadAction<Type.IKakaoPlace[]>) => {
+    setDrawerPlaces: (state, action: PayloadAction<Type.KakaoPlace[]>) => {
       state.drawerPlaces = action.payload;
     },
   },
 });
 
-export const { setUserPosition, setFocusingPlace, setDrawerPlaces, setDrawerSearchQuery } =
-  mapSlice.actions;
+export const {
+  setUserPosition,
+  setFocusingPlace,
+  setDrawerPlaces,
+  setDrawerSearchQuery,
+} = mapSlice.actions;
 
 export default mapSlice.reducer;

@@ -47,6 +47,7 @@ export const ImageRateBox = styled(Box)({
  */
 export const EditorContentBox = styled(Box)({
   width: '100%',
+  minHeight: '150px',
   marginTop: '1rem',
   padding: '0.8rem',
 });
